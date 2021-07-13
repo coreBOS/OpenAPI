@@ -1,0 +1,26 @@
+APILoginResponse:
+  description: format of correct login response
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: object
+      properties:
+        sessionName:
+          type: string
+          example: c4ad8d35e8caa5f69e0e
+        userId:
+          type: string
+          example: 19x5
+        version:
+          type: string
+          example: '0.22'
+        vtigerVersion:
+          type: string
+          example: 5.5.0

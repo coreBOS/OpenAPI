@@ -28,4 +28,4 @@ getchallenge:
             schema:
               oneOf:
                 - $ref: '../components/APIChallengeResponse.yaml#/APIChallengeResponse'
-                - $ref: '../coreBOSAPI.yaml#/components/schemas/APIAuthenticateError'
+                - $ref: '../components/APIAuthenticateError.yaml#/APIAuthenticateError'

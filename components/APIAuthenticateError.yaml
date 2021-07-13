@@ -1,0 +1,21 @@
+APIAuthenticateError:
+  type: object
+  description: format of not authenticated user error
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: AUTHENTICATION_REQUIRED
+      properties:
+        code:
+          type: string
+          example: AUTHENTICATION_REQUIRED
+        message:
+          type: string
+          example: Given user cannot be found

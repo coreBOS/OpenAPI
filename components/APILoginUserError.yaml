@@ -1,0 +1,21 @@
+APILoginUserError:
+  type: object
+  description: format of incorrect login user response
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: INVALID_USER_CREDENTIALS
+      properties:
+        code:
+          type: string
+          example: INVALID_USER_CREDENTIALS
+        message:
+          type: string
+          example: Invalid username or password

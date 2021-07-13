@@ -11,81 +11,9 @@ paths:
   /getchallenge:
     $ref: 'paths/getchallenge.yaml#/getchallenge'
   /login:
-    post:
-      operationId: login
-      summary: Login to the API and get a session ID to access all the other methods
-      description: |
-        You need a valid coreBOS user to access the webservice. All the operations you can do through the REST interface will be limited by the coreBOS permission system of the connected user.
-
-        The API does not use the users password to connect. Instead it needs the users access key which is a unique identifier created for each user that can be found in the users preferences page. [Read more here](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:login)
-      tags:
-        - login
-      responses:
-        '200':
-          description: Returns session name and user information or error
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/APILoginResponse'
-                  - $ref: '#/components/schemas/APILoginUserError'
-                  - $ref: '#/components/schemas/APILoginAuthError'
-      requestBody:
-        description: 'The parameters we need for logging in.'
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                operation:
-                  type: string
-                  default: login
-                  example: login
-                  description: login
-                username:
-                  type: string
-                  example: admin
-                  description: Name of the active coreBOS user that needs access.
-                accessKey:
-                  type: string
-                  example: fc24c37e24f83c2ea72befb679d27eab
-                  description: 'Codified password to login with, it must be the MD5 of the concatenation of challenge token and user access key.'
-              required:
-                - operation
-                - username
-                - accessKey
+    $ref: 'paths/login.yaml#/login'
   /logout:
-    post:
-      operationId: logout
-      summary: Delete session token and logout of API
-      description: 'The [logout service](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:manual:session#logout) eliminates the session information, invalidating any further operations with that session ID. For security reasons this method should be called when the user of the external application finishes his tasks.'
-      tags:
-        - logout
-      responses:
-        '200':
-          description: Returns success or error
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/APILogoutResponse'
-                  - $ref: '#/components/schemas/APISessionError'
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                operation:
-                  type: string
-                  default: logout
-                  example: logout
-                  description: logout
-                sessionName:
-                  type: string
-                  example: 1a907f77602a37b70aa5d
-                  description: active session ID
+    $ref: 'paths/logout.yaml#/logout'
   /retrieve:
     get:
       summary: Retrieving the records with an ID
@@ -8483,50 +8411,6 @@ components:
       properties:
         token:
           type: string
-    APILoginResponse:
-      description: format of correct login response
-      type: object
-      required:
-        - success
-        - result
-      properties:
-        success:
-          type: boolean
-          description: "true"
-          example: true
-        result:
-          type: object
-          properties:
-            sessionName:
-              type: string
-              example: c4ad8d35e8caa5f69e0e
-            userId:
-              type: string
-              example: 19x5
-            version:
-              type: string
-              example: '0.22'
-            vtigerVersion:
-              type: string
-              example: 5.5.0
-    APILogoutResponse:
-      description: format of correct logout response
-      type: object
-      required:
-        - success
-        - result
-      properties:
-        success:
-          type: boolean
-          description: "true"
-          example: true
-        result:
-          type: object
-          description: "constant string: successfull"
-          properties:
-            message:
-              type: string
-              example: successfull
     APIResponse:
       type: object
       required:
@@ -8538,90 +8422,6 @@ components:
           example: true
         result:
           type: object
-    APILoginUserError:
-      type: object
-      description: format of incorrect login user response
-      required:
-        - success
-        - error
-      properties:
-        success:
-          type: boolean
-          description: "false"
-          example: false
-        error:
-          type: object
-          description: INVALID_USER_CREDENTIALS
-          properties:
-            code:
-              type: string
-              example: INVALID_USER_CREDENTIALS
-            message:
-              type: string
-              example: Invalid username or password
-    APILoginAuthError:
-      type: object
-      description: format of incorrect login authorization response
-      required:
-        - success
-        - error
-      properties:
-        success:
-          type: boolean
-          description: "false"
-          example: false
-        error:
-          type: object
-          description: INVALID_AUTH_TOKEN
-          properties:
-            code:
-              type: string
-              example: INVALID_AUTH_TOKEN
-            message:
-              type: string
-              example: Specified token is invalid or expired
-    APISessionError:
-      type: object
-      description: format of incorrect logout response
-      required:
-        - success
-        - error
-      properties:
-        success:
-          type: boolean
-          description: "false"
-          example: false
-        error:
-          type: object
-          description: INVALID_SESSIONID
-          properties:
-            code:
-              type: string
-              example: INVALID_SESSIONID
-            message:
-              type: string
-              example: Session Identifier provided is invalid
-    APIAuthenticateError:
-      type: object
-      description: format of not authenticated user error
-      required:
-        - success
-        - error
-      properties:
-        success:
-          type: boolean
-          description: "false"
-          example: false
-        error:
-          type: object
-          description: AUTHENTICATION_REQUIRED
-          properties:
-            code:
-              type: string
-              example: AUTHENTICATION_REQUIRED
-            message:
-              type: string
-              example: Given user cannot be found
   securitySchemes:
 #    sessionName:
     ApiKeyAuth:        # arbitrary name for the security scheme

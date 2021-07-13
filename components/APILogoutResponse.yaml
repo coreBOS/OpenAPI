@@ -1,0 +1,18 @@
+APILogoutResponse:
+  description: format of correct logout response
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: object
+      description: "constant string: successfull"
+      properties:
+        message:
+          type: string
+          example: successfull

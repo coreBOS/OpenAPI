@@ -1,0 +1,31 @@
+logout:
+  post:
+    operationId: logout
+    summary: Delete session token and logout of API
+    description: 'The [logout service](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:manual:session#logout) eliminates the session information, invalidating any further operations with that session ID. For security reasons this method should be called when the user of the external application finishes his tasks.'
+    tags:
+      - logout
+    responses:
+      '200':
+        description: Returns success or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/APILogoutResponse.yaml#/APILogoutResponse'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              operation:
+                type: string
+                default: logout
+                example: logout
+                description: logout
+              sessionName:
+                type: string
+                example: 1a907f77602a37b70aa5d
+                description: active session ID

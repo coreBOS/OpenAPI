@@ -1,0 +1,45 @@
+login:
+  post:
+    operationId: login
+    summary: Login to the API and get a session ID to access all the other methods
+    description: |
+      You need a valid coreBOS user to access the webservice. All the operations you can do through the REST interface will be limited by the coreBOS permission system of the connected user.
+
+      The API does not use the users password to connect. Instead it needs the users access key which is a unique identifier created for each user that can be found in the users preferences page. [Read more here](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:login)
+    tags:
+      - login
+    responses:
+      '200':
+        description: Returns session name and user information or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/APILoginResponse.yaml#/APILoginResponse'
+                - $ref: '../components/APILoginUserError.yaml#/APILoginUserError'
+                - $ref: '../components/APILoginAuthError.yaml#/APILoginAuthError'
+    requestBody:
+      description: 'The parameters we need for logging in.'
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              operation:
+                type: string
+                default: login
+                example: login
+                description: login
+              username:
+                type: string
+                example: admin
+                description: Name of the active coreBOS user that needs access.
+              accessKey:
+                type: string
+                example: fc24c37e24f83c2ea72befb679d27eab
+                description: 'Codified password to login with, it must be the MD5 of the concatenation of challenge token and user access key.'
+            required:
+              - operation
+              - username
+              - accessKey

@@ -1,0 +1,21 @@
+APISessionError:
+  type: object
+  description: format of incorrect logout response
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: INVALID_SESSIONID
+      properties:
+        code:
+          type: string
+          example: INVALID_SESSIONID
+        message:
+          type: string
+          example: Session Identifier provided is invalid
