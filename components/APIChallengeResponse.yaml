@@ -1,0 +1,26 @@
+APIChallengeResponse:
+  description: format of correct GetChallengeResult object response
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: object
+      properties:
+        token:
+          type: string
+          description: challenge token string
+          example: 60eb729c22fba
+        serverTime:
+          type: integer
+          description: time on the server
+          example: 1626043899
+        expireTime:
+          type: integer
+          description: expire time of token
+          example: 1626050236
