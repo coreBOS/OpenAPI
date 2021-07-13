@@ -1,0 +1,40 @@
+retrieve:
+  get:
+    operationId: retrieve
+    summary: 2-Retrieve the field values of the given record ID
+    description: |
+      Get all the fields of the given record that the user has access to. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#retrieve)
+    tags:
+      - CRUD Operations
+    responses:
+      '200':
+        description: Returns field values of a record or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/APICURRResponse.yaml#/APICURRResponse'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+                - $ref: '../components/APIAccessDenied.yaml#/APIAccessDenied'
+    parameters:
+      - schema:
+          type: string
+        in: query
+        name: operation
+        example: retrieve
+        description: retrieve
+        required: true
+      - schema:
+          type: string
+        in: query
+        name: id
+        example: 11x74
+        description: web service ID or cbuuid of the record we want to recover
+        required: true
+      - schema:
+          type: string
+        in: query
+        name: sessionName
+        example: 3fde6cf960edb4e9e91e3
+        description: The session Id.
+        required: true

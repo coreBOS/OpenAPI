@@ -11,10 +11,11 @@
 	<rapi-doc id="thedoc" spec-url="./coreBOSAPI.yaml" allow-server-selection="true" show-header="false"
 		show-info="true" theme="light" allow-try="true" sort-endpoints-by="summary" fill-request-fields-with-example="true"
 		allow-api-list-style-selection="false" regular-font="Open Sans" schema-style="table" render-style="read"
-		default-schema-tab="model">
+		default-schema-tab="model" layout="column" allow-authentication="false">
 		<div slot="nav-logo" style="width:100%; display: flex;justify-content: center;">
-			<button class="btn medium" onclick="document.getElementById('thedoc').setAttribute('schema-style', 'table')">Table</button>
-			<button class="btn medium" onclick="document.getElementById('thedoc').setAttribute('schema-style', 'tree')">Tree</button>
+			<img src="coreBOS80.png" alt="coreBOS" />
+			<button class="btn medium" onclick="document.getElementById('thedoc').setAttribute('schema-style', 'table')" style="display:none;">Table</button>
+			<button class="btn medium" onclick="document.getElementById('thedoc').setAttribute('schema-style', 'tree')" style="display:none;">Tree</button>
 		</div>
 	</rapi-doc>
 </body>

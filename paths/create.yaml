@@ -1,0 +1,47 @@
+create:
+  post:
+    operationId: create
+    summary: 1-Creates a new record in the application.
+    description: |
+      [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#create)
+    tags:
+      - CRUD Operations
+    responses:
+      '200':
+        description: Returns created record or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/APICURRResponse.yaml#/APICURRResponse'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+                - $ref: '../components/APIAccessDenied.yaml#/APIAccessDenied'
+                - $ref: '../components/APIMissingMandatoryFields.yaml#/APIMissingMandatoryFields'
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              operation:
+                type: string
+                default: create
+                example: create
+                description: create
+              sessionName:
+                type: string
+                example: 1a907f77602a37b70aa5d
+                description: active session ID
+              elementType:
+                type: string
+                description: Module name where we want to create the record
+                example: Contacts
+              element:
+                type: string
+                description: JSON string with all the field-value entries to save
+                example: '{"firstname":"River","lastname":"Song","assigned_user_id":"19x5"}'
+            required:
+              - elementType
+              - element
+              - operation
+              - sessionName

@@ -1,0 +1,41 @@
+revise:
+  post:
+    operationId: revise
+    summary: 4-Updates fields of a given record
+    description: |
+      Updating specific fields within a record, unlike update it is not mandatory to send all the mandatory fields. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#revise)
+    tags:
+      - CRUD Operations
+    responses:
+      '201':
+        description: Returns updated record or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/APICURRResponse.yaml#/APICURRResponse'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+                - $ref: '../components/APIAccessDenied.yaml#/APIAccessDenied'
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              operation:
+                type: string
+                default: revise
+                example: revise
+                description: revise
+              sessionName:
+                type: string
+                example: 1a907f77602a37b70aa5d
+                description: active session ID
+              element:
+                type: string
+                description: JSON string with all the field-value entries to update. It is mandatory to set the ID field.
+                example: '{"id":"12x44499","phone":"123456789"}'
+            required:
+              - element
+              - operation
+              - sessionName

@@ -1,0 +1,21 @@
+APICURRResponse:
+  description: format of correct create/update/revise/retrieve response
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: object
+      properties:
+        fieldnames:
+          type: mixed
+      example: {
+        firstname: River,
+        lastname: Song,
+        id: 12x1075
+      }

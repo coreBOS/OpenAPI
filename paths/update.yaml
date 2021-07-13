@@ -1,0 +1,42 @@
+update:
+  post:
+    operationId: update
+    summary: 3-Updates ALL the fields of a given record
+    description: |
+      [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#update)
+    tags:
+      - CRUD Operations
+    responses:
+      '200':
+        description: Returns updated record or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/APICURRResponse.yaml#/APICURRResponse'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+                - $ref: '../components/APIAccessDenied.yaml#/APIAccessDenied'
+                - $ref: '../components/APIMissingMandatoryFields.yaml#/APIMissingMandatoryFields'
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              operation:
+                type: string
+                default: update
+                example: update
+                description: update
+              sessionName:
+                type: string
+                example: 1a907f77602a37b70aa5d
+                description: active session ID
+              element:
+                type: string
+                description: JSON string with all the field-value entries to save. It is mandatory to set the ID field and send in all mandatory fields.
+                example: '{"id":"12x44499","firstname":"Amy","lastname":"Pond","assigned_user_id":"19x5"}'
+            required:
+              - element
+              - operation
+              - sessionName

@@ -1,0 +1,40 @@
+query:
+  get:
+    operationId: query
+    summary: Retrieve a set of records with an SQL like language that understands the entities in the system and their relations
+    description: Retrieve informaton using a hybrid SQL language named VQL This language is a reduced subset of the standard SQL language with extensions to "understand" the business entities contained in each coreBOS. [Read all about it here](https://corebos.com/documentation/doku.php?id=en:devel:corebosws:querylanguage)
+    tags:
+      - query
+    parameters:
+      - schema:
+          type: string
+        in: query
+        name: operation
+        example: query
+        description: query
+        required: true
+      - schema:
+          type: string
+        in: query
+        name: query
+        example: select accountname from accounts limit 3;
+        description: query language command terminated in semicolon
+        required: true
+      - schema:
+          type: string
+        in: query
+        name: sessionName
+        example: 3fde6cf960edb4e9e91e3
+        description: The session Id.
+        required: true
+    responses:
+      '200':
+        description: Return a set of records or error object
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/APIQueryResponse.yaml#/APIQueryResponse'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+                - $ref: '../components/APIAccessDenied.yaml#/APIAccessDenied'
+                - $ref: '../components/APIQuerySyntaxError.yaml#/APIQuerySyntaxError'

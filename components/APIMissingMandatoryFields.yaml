@@ -1,0 +1,21 @@
+APIMissingMandatoryFields:
+  type: object
+  description: format of incorrect create/update response
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: MANDATORY_FIELDS_MISSING
+      properties:
+        code:
+          type: string
+          example: MANDATORY_FIELDS_MISSING
+        message:
+          type: string
+          example: (some field) does not have a value

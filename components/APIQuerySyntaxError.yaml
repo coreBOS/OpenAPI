@@ -1,0 +1,21 @@
+APIQuerySyntaxError:
+  type: object
+  description: format of incorrect query
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: QUERY_SYNTAX_ERROR
+      properties:
+        code:
+          type: string
+          example: QUERY_SYNTAX_ERROR
+        message:
+          type: string
+          example: Syntax Error on line 1

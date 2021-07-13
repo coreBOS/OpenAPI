@@ -1,0 +1,41 @@
+delete:
+  post:
+    operationId: delete
+    summary: 5-Eliminate any record we have permission to delete
+    description: |
+      [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#delete)
+    tags:
+      - CRUD Operations
+    responses:
+      '200':
+        description: Returns created record or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/APILogoutResponse.yaml#/APILogoutResponse'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+                - $ref: '../components/APIAccessDenied.yaml#/APIAccessDenied'
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              operation:
+                type: string
+                default: delete
+                example: delete
+                description: delete
+              sessionName:
+                type: string
+                example: 1a907f77602a37b70aa5d
+                description: active session ID
+              id:
+                type: string
+                description: web service ID or cbuuid of the record we want to delete
+                example: 12x44499
+            required:
+              - id
+              - operation
+              - sessionName

@@ -1,0 +1,35 @@
+APIQueryResponse:
+  description: format of correct query response
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: array
+      items:
+        type: object
+        properties:
+          fieldnames:
+            type: mixed
+      example: [
+        {
+          accountname: Chemex Labs Ltd,
+          id: 11x74
+        },
+        {
+          accountname: Atrium Marketing Inc,
+          id: 11x75
+        }
+      ]
+    moreinfo:
+      type: object
+      properties:
+        totalrows:
+          type: integer
+          example: 1181
+  required:
+    - success
+    - result
+    - moreinfo
