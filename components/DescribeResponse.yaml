@@ -1,0 +1,185 @@
+DescribeResponse:
+  description: format of describe object
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: object
+      description: module metadata information
+      properties:
+        label:
+          type: string
+          description: translated label of the module
+          example: Contacts
+        label_raw:
+          type: string
+          description: untranslated label of the module
+          example: Contacts
+        name:
+          type: string
+          description: internal module name
+          example: Contacts
+        createable:
+          type: boolean
+          description: if the current user has permission to create in this module
+          example: true
+        updateable:
+          type: boolean
+          description: if the current user has permission to update in this module
+          example: true
+        deleteable:
+          type: boolean
+          description: if the current user has permission to delete in this module
+          example: false
+        retrieveable:
+          type: boolean
+          description: if the current user has permission to retrieve in this module
+          example: true
+        fields:
+          type: array
+          description: list of all the fields the current user has access to
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: firstname
+              label:
+                type: string
+                example: First Name
+              label_raw:
+                type: string
+                example: First Name
+              mandatory:
+                type: boolean
+                example: false
+              type:
+                type: object
+                description: information of the type of field
+                properties:
+                  name:
+                    type: string
+                    description: type of field
+                    example: string
+                  refersTo:
+                    type: array
+                    description: list of modules the field references
+                    items:
+                      type: string
+              nullable:
+                type: boolean
+                example: true
+              editable:
+                type: boolean
+                example: true
+              uitype:
+                type: string
+                example: 55
+              typeofdata:
+                type: string
+                example: V~O
+              sequence:
+                type: string
+                example: 1
+              quickcreate:
+                type: boolean
+                example: false
+              displaytype:
+                type: string
+                example: 3
+              summary:
+                type: string
+                example: B
+              block:
+                type: object
+                description: information of the block the field is in
+                properties:
+                  blockid:
+                    type: string
+                    example: 4
+                  blocksequence:
+                    type: string
+                    example: 1
+                  blocklabel:
+                    type: string
+                    example: LBL_CONTACT_INFORMATION
+                  blockname:
+                    type: string
+                    example: Contact Information
+              default:
+                type: string
+        idPrefix:
+          type: string
+          description: internal web service module ID
+          example: 12
+        isEntity:
+          type: boolean
+          description: true if it is a module, false if it is an extension
+          example: true
+        labelFields:
+          type: string
+          description: ID field(s)
+          example: firstname,lastname
+        filterFields:
+          type: object
+          description: information of fields to show in a list view of this module
+          properties:
+            fields:
+              type: array
+              description: list of field names to show in list view
+              items:
+                type: string
+                example: fieldname
+            linkfields:
+              type: array
+              description: list of field names to use as links to the detail view
+              items:
+                type: string
+                example: fieldname
+            pagesize:
+              type: integer
+              description: number of rows to show in the list
+              example: 40
+        relatedModules:
+          type: object
+          description: information of the related lists that the main module has
+          properties:
+            modulename:
+              type: object
+              properties:
+                related_tabid:
+                  type: string
+                  example: 2
+                related_module:
+                  type: string
+                  example: Potentials
+                label:
+                  type: string
+                  example: Potentials
+                labeli18n:
+                  type: string
+                  example: Opportunities
+                actions:
+                  type: string
+                  example: add
+                relationId:
+                  type: string
+                  example: 18
+                relatedfield:
+                  type: string
+                  example: related_to
+                relationtype:
+                  type: string
+                  example: 1:N
+                filterFields:
+                  type: array
+                  description: list of field names to show in the related list view
+                  items:
+                    type: string
+                    example: fieldname

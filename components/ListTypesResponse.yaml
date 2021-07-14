@@ -1,0 +1,36 @@
+ListTypesResponse:
+  description: format of listtypes object
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: true
+      example: true
+    result:
+      type: object
+      description: module metadata information
+      properties:
+        types:
+          type: array
+          description: list of module names
+          items:
+            type: string
+            example: Campaigns
+        information:
+          type: object
+          properties:
+            modulename:
+              type: object
+              properties:
+                isEntity:
+                  type: boolean
+                  example: true
+                label:
+                  type: string
+                  example: Campaigns
+                singular:
+                  type: string
+                  example: Campaign

@@ -1,0 +1,39 @@
+listtypes:
+  get:
+    operationId: listtypes
+    summary: Returns a list of module names the currently connected user has access to
+    description: |
+      List of modules the user has access to which contain at least one field of the types given. If no types are given all accessible modules are returned. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference&#list_types)
+    tags:
+      - Metadata information
+    responses:
+      '200':
+        description: Returns information of accessible modules or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/ListTypesResponse.yaml#/ListTypesResponse'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+    parameters:
+      - schema:
+          type: string
+        in: query
+        name: operation
+        example: listtypes
+        description: listtypes
+        required: true
+      - schema:
+          type: string
+        in: query
+        name: fieldTypeList
+        example: phone
+        description: Comma-separated list of field types
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: sessionName
+        example: 3fde6cf960edb4e9e91e3
+        description: The session Id.
+        required: true

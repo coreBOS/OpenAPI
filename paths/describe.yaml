@@ -1,0 +1,40 @@
+describe:
+  get:
+    operationId: describe
+    summary: Detailed information about a module
+    description: |
+      The Describe service gives us detailed information about the module. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference&#describe)'
+    tags:
+      - Metadata information
+    responses:
+      '200':
+        description: Returns information of module or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/DescribeResponse.yaml#/DescribeResponse'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+                - $ref: '../components/APIAccessDenied.yaml#/APIAccessDenied'
+    parameters:
+      - schema:
+          type: string
+        in: query
+        name: operation
+        example: describe
+        description: describe
+        required: true
+      - schema:
+          type: string
+        in: query
+        name: elementType
+        example: Accounts,Contacts
+        description: Comma-separated list of modules for which we want more detailed information
+        required: true
+      - schema:
+          type: string
+        in: query
+        name: sessionName
+        example: 3fde6cf960edb4e9e91e3
+        description: The session Id.
+        required: true
