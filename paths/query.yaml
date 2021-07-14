@@ -1,6 +1,6 @@
 query:
   get:
-    operationId: query
+    operationId: Query
     summary: Retrieve a set of records with an SQL like language that understands the entities in the system and their relations
     description: Retrieve informaton using a hybrid SQL language named VQL This language is a reduced subset of the standard SQL language with extensions to "understand" the business entities contained in each coreBOS. [Read all about it here](https://corebos.com/documentation/doku.php?id=en:devel:corebosws:querylanguage)
     tags:

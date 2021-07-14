@@ -1,0 +1,33 @@
+GetRelatedXYResponse:
+  description: relation of related modules
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: array
+      uniqueItems: true
+      minItems: 0
+      items:
+        required:
+          - label
+          - name
+          - field
+        properties:
+          label:
+            type: string
+            description: related module label
+            example: Organizations
+          name:
+            type: string
+            description: related module name
+            example: Accounts
+          field:
+            type: string
+            description: link field
+            example: account_id
+  required:
+    - success
+    - result

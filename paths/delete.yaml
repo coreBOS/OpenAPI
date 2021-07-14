@@ -1,6 +1,6 @@
 delete:
   post:
-    operationId: delete
+    operationId: Delete
     summary: 5-Eliminate any record we have permission to delete
     description: |
       [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#delete)

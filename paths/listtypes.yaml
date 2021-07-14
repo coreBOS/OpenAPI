@@ -1,6 +1,6 @@
 listtypes:
   get:
-    operationId: listtypes
+    operationId: ListTypes
     summary: Returns a list of module names the currently connected user has access to
     description: |
       List of modules the user has access to which contain at least one field of the types given. If no types are given all accessible modules are returned. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference&#list_types)

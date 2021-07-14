@@ -1,0 +1,20 @@
+getUItypeResponse:
+  description: format of getUItype object
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: true
+      example: true
+    result:
+      type: object
+      description: list of module fields and their uitype
+      example: {
+        "salutationtype":"55",
+        "firstname":"55",
+        "contact_no":"4",
+        "phone":"11"
+      }

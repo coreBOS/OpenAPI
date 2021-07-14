@@ -1,0 +1,40 @@
+getUItype:
+  post:
+    operationId: getUItype
+    deprecated: true
+    summary: Returns a list of all the fields in the module with their uitype
+    description: |
+      This endpoint is **deprecated**. Use [Describe](#get-/describe) and cache the value locally in your application.
+      [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#other_information)
+    tags:
+      - Metadata information
+    responses:
+      '200':
+        description: Returns a list of all the fields in the module with their uitype or an empty array
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/getUItypeResponse.yaml#/getUItypeResponse'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              operation:
+                type: string
+                default: getUItype
+                example: getUItype
+              sessionName:
+                type: string
+                example: 1a907f77602a37b70aa5d
+                description: active session ID
+              module:
+                type: string
+                description: Module name to obtain the uitype information for
+                example: Contacts
+            required:
+              - operation
+              - sessionName

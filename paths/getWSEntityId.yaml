@@ -1,0 +1,40 @@
+getWSEntityId:
+  post:
+    operationId: getWSEntityID
+    deprecated: true
+    summary: Returns the given modules' web service entity ID
+    description: |
+      This endpoint is **deprecated**. Use [Describe](#get-/describe) and cache the value locally in your application.
+      [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#other_information)
+    tags:
+      - Metadata information
+    responses:
+      '200':
+        description: Returns internal web service module ID or 0x if module name can not be found
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/getWSEntityIdResponse.yaml#/getWSEntityIdResponse'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              operation:
+                type: string
+                default: vtyiicpng_getWSEntityId
+                example: vtyiicpng_getWSEntityId
+              sessionName:
+                type: string
+                example: 1a907f77602a37b70aa5d
+                description: active session ID
+              entityName:
+                type: string
+                description: Module name to obtain the ID for
+                example: Contacts
+            required:
+              - operation
+              - sessionName
