@@ -1,0 +1,105 @@
+INVALID_USER:
+  type: object
+  description: invalid User web service ID
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: INVALID_USER
+      properties:
+        code:
+          type: string
+          example: INVALID_USER
+        message:
+          type: string
+          example: Given ID is not a valid user ID
+PASSWORD_NOT_STRONG:
+  type: object
+  description: given password does not comply with security restrictions
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: PASSWORD_NOT_STRONG
+      properties:
+        code:
+          type: string
+          example: PASSWORD_NOT_STRONG
+        message:
+          type: string
+          example: insecure password given
+INVALID_OLD_PASSWORD:
+  type: object
+  description: given password does not match existing password
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: INVALID_OLD_PASSWORD
+      properties:
+        code:
+          type: string
+          example: INVALID_OLD_PASSWORD
+        message:
+          type: string
+          example: current password does not match given password
+DATABASE_QUERY_ERROR:
+  type: object
+  description: Database error while performing requested operation
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: DATABASE_QUERY_ERROR
+      properties:
+        code:
+          type: string
+          example: DATABASE_QUERY_ERROR
+        message:
+          type: string
+          example: Database error while performing requested operation
+CHANGE_PASSWORD_FAILURE:
+  type: object
+  description: error trying to change password
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: CHANGE_PASSWORD_FAILURE
+      properties:
+        code:
+          type: string
+          example: CHANGE_PASSWORD_FAILURE
+        message:
+          type: string
+          example: Failed to change password

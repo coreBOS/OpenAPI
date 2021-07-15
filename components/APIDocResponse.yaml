@@ -1,0 +1,149 @@
+APIDocResponse:
+  description: Binary document response
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: array
+      uniqueItems: true
+      minItems: 1
+      items:
+        required:
+          - recordid
+          - modulename
+          - field
+        properties:
+          recordid:
+            type: string
+            description: record to obtain the document from
+            example: 23x999
+          modulename:
+            type: string
+            description: record module name
+            example: Invoice
+          pdf_data:
+            type: string
+            description: base64 encoded file string
+            example: 999
+  required:
+    - success
+    - result
+GenDocErrorResponse:
+  description: GenDoc Binary document error response
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: array
+      uniqueItems: true
+      minItems: 1
+      items:
+        required:
+          - message
+          - file
+        properties:
+          message:
+            type: string
+            description: No template found
+            example: No template found
+          file:
+            type: string
+            description: empty string
+            example: ' '
+  required:
+    - success
+    - result
+GenDocFileResponse:
+  description: GenDoc Binary document file response
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: array
+      uniqueItems: true
+      minItems: 1
+      items:
+        required:
+          - message
+          - file
+        properties:
+          message:
+            type: string
+            description: Report is generated
+            example: Report is generated
+          file:
+            type: string
+            description: file path
+            example: cache/somefile.zip
+  required:
+    - success
+    - result
+ConvertErrorResponse:
+  description: GenDoc convert document error response
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: object
+      properties:
+        result:
+          type: string
+          description: error/success
+          example: error
+        errormessage:
+          type: string
+          description: reason of error response
+          example: Service deactivated
+  required:
+    - success
+    - result
+ConvertFileResponse:
+  description: GenDoc converted document response
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: object
+      properties:
+        result:
+          type: string
+          description: success
+          example: success
+        file:
+          type: object
+          description: converted file
+          properties:
+            name:
+              type: string
+              description: file name
+              example: mydocument.odt
+            size:
+              type: integer
+              description: size of the file in bytes
+              example: 98735
+            type:
+              type: string
+              description: file mime type
+              example: text/html
+            content:
+              type: string
+              description: "base64 encoded file contents"
+              example: "base64 encoded file contents"
+  required:
+    - success
+    - result

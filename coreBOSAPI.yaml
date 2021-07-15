@@ -39,108 +39,150 @@ paths:
   /deleteUser:
     post:
       operationId: deleteUser
-      summary: Removing a user
-      description: Permits us to delete a user and transfer all his assigned records to another user.
+      summary: 6-Eliminates a user
+      description: Permits us to delete a user and transfer all his assigned records to another user
+      tags:
+        - CRUD Operations
       responses:
-        '204':
-          description: Successful deleted a user
-        '401':
-          description: Permission denied.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              description: ''
-              type: object
-              properties:
-                operation:
-                  type: string
-                  description: Operation name.
-                  in: query
-                  example: deleteUser
-                sessionName:
-                  type: string
-                  description: The session Id of the user.
-                  in: query
-                  example: 1a907f77602a37b70aa5d
-                id:
-                  type: string
-                  description: User web service ID that will be deleted.
-                  in: query
-                  example: 19x6
-                newOwnerId:
-                  type: string
-                  description: User web service ID to transfer records to.
-                  in: query
-                  example: 19x1
-              required:
-                - operation
-                - sessionName
-                - id
-                - newOwnerId
-  /changePassword:
-    post:
-      operationId: changePassword
-      summary: Changing password of the current user we loggedin.
-      description: Permits a user to change his password or the password of another user if the connected user is an administrator.
-      responses:
-        '201':
-          description: Successful updated the password.
+        '200':
+          description: Returns created record or error
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                        minLength: 1
-                    required:
-                      - message
-                required:
-                  - success
-                  - result
+                oneOf:
+                  - $ref: 'components/APILogoutResponse.yaml#/APILogoutResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
-                  description: The operation name.
-                  in: query
-                  example: changePassword
+                  default: deleteUser
+                  example: deleteUser
+                  description: deleteUser
                 sessionName:
                   type: string
-                  description: The session name.
-                  in: query
                   example: 1a907f77602a37b70aa5d
+                  description: active session ID
                 id:
                   type: string
-                  description: 'User web service ID '
-                  in: query
-                  example: 19x6
+                  description: web service ID of the user we want to delete
+                  example: 19x8
+                newOwnerId:
+                  type: string
+                  description: web service ID of the user we want to transfer the records to
+                  example: 19x1
+              required:
+                - id
+                - newOwnerId
+                - operation
+                - sessionName
+  /changePassword:
+    post:
+      operationId: changePassword
+      summary: 7-Change a user password
+      description: Permits a user to change his password or the password of another user if the connected user is an administrator
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: Returns created record or error
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/changePasswordResponse.yaml#/changePasswordResponse'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_USER'
+                  - $ref: 'components/APIErrors.yaml#/PASSWORD_NOT_STRONG'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_OLD_PASSWORD'
+                  - $ref: 'components/APIErrors.yaml#/DATABASE_QUERY_ERROR'
+                  - $ref: 'components/APIErrors.yaml#/CHANGE_PASSWORD_FAILURE'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: changePassword
+                  example: changePassword
+                  description: changePassword
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                id:
+                  type: string
+                  description: web service ID of the user we want to change password
+                  example: 19x8
                 oldPassword:
                   type: string
-                  in: query
-                  example: admin
-                  description: 'The password to be changed, the recent password.'
+                  description: current user password
+                  example: strong_password
                 newPassword:
                   type: string
-                  description: The new password to be added.
-                  in: query
-                  example: 123heloo
+                  description: new password
+                  example: stronger_password
                 confirmPassword:
                   type: string
-                  description: The new password to be added
-                  in: query
-                  example: 123heloo
+                  description: new password again
+                  example: stronger_password
+              required:
+                - id
+                - oldPassword
+                - newPassword
+                - confirmPassword
+                - operation
+                - sessionName
+  /changeAccessKey:
+    post:
+      operationId: changePassword
+      summary: 8-Change a user API Access Key
+      description: Permits a user to change his Access Key or the Access Key of another user if the connected user is an administrator
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: Returns created record or error
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/changePasswordResponse.yaml#/changeAccessKeyResponse'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_USER'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: changeAccessKey
+                  example: changeAccessKey
+                  description: changeAccessKey
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                id:
+                  type: string
+                  description: web service ID of the user we want to change access key
+                  example: 19x8
+              required:
+                - id
+                - operation
+                - sessionName
+
+
+
   /addTicketFaqComment:
     post:
       operationId: addTicketFaqComment
@@ -2288,45 +2330,6 @@ paths:
           name: sessionName
           required: true
           description: The session Id of the user.
-  /getpdfdata:
-    post:
-      operationId: getPDFdata
-      summary: Generate Portable Document File.
-      description: The purpose of these enhancements are to permit uploading files when we create/update documents through the web service interface.
-      responses:
-        '200':
-          description: OK
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              description: ''
-              type: object
-              properties:
-                operation:
-                  type: string
-                  minLength: 1
-                  description: The operation name.
-                sessionName:
-                  type: string
-                  minLength: 1
-                  description: The session Id of the user.
-                id:
-                  type: string
-                  minLength: 1
-                  description: The document Id.
-              required:
-                - operation
-                - sessionName
-                - id
-            examples:
-              example-1:
-                value:
-                  operation: getpdfdata
-                  sessionName: 74b28658600dcf0e7157b
-                  id: 15x8413
-        description: ''
   /getRelatedRecords:
     post:
       operationId: getRelatedRecords
@@ -2732,56 +2735,180 @@ paths:
           name: operation
           description: The operation name.
           required: true
-  /getmergedtemplate:
-    get:
-      operationId: getMergedTemplate
-      summary: Merged template.
-      description: 'Convert documents web service, you can now send a template and CRMID to get a merged document back.'
-      tags: []
+
+
+  /gendoc_convert:
+    post:
+      operationId: GenDocConversion
+      summary: Convert documents using unoconv service
+      description: Allows a web service client to send an OpenOffice/LibreOffice document for it to be converted into any format supported by unoconv and retrieve the resulting file
+      tags:
+        - Document Generation
       responses:
         '200':
-          description: OK
+          description: Return a set of records or error object
           content:
             application/json:
               schema:
-                type: string
-                description: The name of the fianl output file aftre merge.
-              examples:
-                example-1:
-                  value: doc.pdf
+                oneOf:
+                  - $ref: 'components/APIDocResponse.yaml#/ConvertFileResponse'
+                  - $ref: 'components/APIDocResponse.yaml#/ConvertErrorResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: gendoc_convert
+                  example: gendoc_convert
+                  description: gendoc_convert
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                file:
+                  type: object
+                  description: file to convert
+                  properties:
+                    name:
+                      type: string
+                      description: file name
+                      example: mydocument.odt
+                    size:
+                      type: integer
+                      description: size of the file in bytes
+                      example: 98735
+                    type:
+                      type: string
+                      description: file mime type
+                      example: application/odt
+                    content:
+                      type: string
+                      description: "base64 encoded file contents"
+                      example: "base64 encoded file contents"
+                  example: {
+                    name: file_name,
+                    size: 345,
+                    type: odt,
+                    content: "base64 encoded file contents"
+                  }
+                convert_format:
+                  type: string
+                  description: format to convert input file
+                  example: html
+              required:
+                - file
+                - convert_format
+                - operation
+                - sessionName
+  /getmergedtemplate:
+    get:
+      operationId: getMergedTemplate
+      summary: Merge records with GenDoc template
+      description: Get the binary representation of a template with records from a GenDoc supported module.
+      tags:
+        - Document Generation
+      responses:
+        '200':
+          description: Return a set of records or error object
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/APIDocResponse.yaml#/GenDocFileResponse'
+                  - $ref: 'components/APIDocResponse.yaml#/GenDocErrorResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
       parameters:
         - schema:
             type: string
           in: query
+          name: operation
+          example: getmergedtemplate
+          description: getmergedtemplate
           required: true
-          name: ' operation  '
-          description: 'The opeeration name.  '
         - schema:
             type: string
           in: query
-          name: sessionName
+          name: template
+          example: 18x1393
+          description: document web service ID that contains the template to merge
           required: true
-          description: The session Id of the user.
         - schema:
-            type: array
+            type: string
           in: query
           name: crmids
-          description: An array of crmids values.
+          example: 11x74,11x75
+          description: comma-separated list of records to merge with the template
           required: true
         - schema:
             type: string
           in: query
           name: output_format
-          description: The final output file format.
+          example: onepdf
+          description: |
+            format of the final document
+            - pdf: PDF files
+            - odt: ODT files
+            - onepdf: all the merged templates for each CRMID joined in one PDF file
+            - oneodt: all the merged templates for each CRMID joined in one ODT file
           required: true
         - schema:
             type: string
           in: query
+          name: sessionName
+          example: 3fde6cf960edb4e9e91e3
+          description: The session Id.
           required: true
-          name: template
-          description: The template Id  we want to merge.
+  /getpdfdata:
+    post:
+      operationId: getPDFdata
+      summary: Generate application PDF of a record
+      description: |
+        Get the PDF representation of an inventory or supported module records.
 
-
+        There are a set of global variables that govern how this method works:
+        - CustomerPortal_PDF_Modules – global variable defines more modules supported by this endpoint.
+        - CustomerPortal_PDF – global variable defines how to get the PDF: PDFMaker, GenDoc, or Native
+        - CustomerPortal_PDFTemplate_{module} – defines the templateID to use for GenDoc and PDFMaker
+      tags:
+        - Document Generation
+      responses:
+        '200':
+          description: PDF output of record or error
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/APIDocResponse.yaml#/APIDocResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: getpdfdata
+                  example: getpdfdata
+                  description: getpdfdata
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                id:
+                  type: string
+                  description: web service ID of a record in a supported module
+                  example: 23x999
+              required:
+                - id
+                - operation
+                - sessionName
   /getRelatedModulesInfomation:
     post:
       operationId: getRelatedModulesInfomation
