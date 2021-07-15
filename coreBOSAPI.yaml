@@ -24,6 +24,193 @@ paths:
     $ref: 'paths/login.yaml#/login'
   /logout:
     $ref: 'paths/logout.yaml#/logout'
+  /extendsession:
+    post:
+      operationId: ExtendSession
+      summary: Renewing token expiration time.
+      description: 'This method will detect the existing session and return a validated login session for the web service API.(read me)[http://corebos.com/documentation/doku.php?id=en:devel:corebosws:manual:session&#extendsession]'
+      tags:
+        - login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                description: ''
+                properties:
+                  sessionName:
+                    type: string
+                    description: Validated session ID to use in subsequent calls.
+                  userId:
+                    type: string
+                    description: Web service ID of the connected user.
+                  version:
+                    type: string
+                    description: coreBOS and web service version numbers.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                sessionName:
+                  type: string
+              required:
+                - operation
+                - sessionName
+            examples:
+              example-1:
+                value:
+                  operation: extendsession
+                  sessionName: 74b28658600dcf0e7157b
+        description: ''
+  /authenticateContact:
+    post:
+      operationId: authenticateContact
+      summary: Validates a contact access to the portal
+      description: The contact must have an active portal access with correct access dates and give the correct email and password.
+      tags:
+        - login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: boolean
+                required:
+                  - success
+                  - result
+              examples:
+                example-1:
+                  value:
+                    success: true
+                    result: false
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  description: The operation name.
+                sessionName:
+                  type: string
+                  description: SessionID of the loggedin user.
+                password:
+                  type: string
+                  description: Password sent to the contact when he was activated in the application
+                email:
+                  type: string
+                  description: Primary email of the contact in the application
+              required:
+                - operation
+                - sessionName
+                - password
+                - email
+            examples:
+              example-1:
+                value:
+                  operation: authenticateContact
+                  sessionName: 74b28658600dcf0e7157b
+                  password: '@1475charity'
+                  email: charity.mbisi@axelera.io
+        description: ''
+  /changePortalUserPassword:
+    post:
+      operationId: changePortalUserPassword
+      summary: ''
+      description: Updating vtiger user portal information.
+      tags:
+        - login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                description: Returns the number of affected rows.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  description: The operation name.
+                sessionName:
+                  type: string
+                  description: Session Id of the logged in user.
+                email:
+                  type: string
+                  description: User email.
+                newPass:
+                  type: string
+                  description: New password of the user.
+              required:
+                - operation
+                - sessionName
+                - email
+                - newPass
+            examples:
+              example-1:
+                value:
+                  operation: changePortalUserPassword
+                  sessionName: 74b28658600dcf0e7157b
+                  email: charity.mbisi@axelera.io
+                  newPass: 1475charity
+        description: ''
+  /loginPortal:
+    get:
+      operationId: loginPortal
+      summary: This method returns a valid logged in session with the internal "portal" user
+      description: Validates a contact access to the portal the contact must have an active portal access with correct access dates and give the correct email and password.
+      tags:
+        - login
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: email
+          description: The email of the logged in user.
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: password
+          description: User account password.
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: operation
+          description: The operation name.
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: sessionName
+          description: The session Id .
+          required: true
+
   /query:
     $ref: 'paths/query.yaml#/query'
   /create:
@@ -87,7 +274,7 @@ paths:
       summary: 7-Change a user password
       description: Permits a user to change his password or the password of another user if the connected user is an administrator
       tags:
-        - CRUD Operations
+        - login
       responses:
         '200':
           description: Returns created record or error
@@ -146,7 +333,7 @@ paths:
       summary: 8-Change a user API Access Key
       description: Permits a user to change his Access Key or the Access Key of another user if the connected user is an administrator
       tags:
-        - CRUD Operations
+        - login
       responses:
         '200':
           description: Returns created record or error
@@ -182,12 +369,388 @@ paths:
                 - sessionName
 
 
-
+  /retrievedocattachment:
+    get:
+      operationId: retrievedocattachment
+      summary: Returns the base64 encoded file attached to the given document.
+      description: Obtain information of the attachment of a document without downloading the whole file which would slow many operations.
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                description: An object with the fields of the attachment. For each given identifier we will get an array with this structure.
+                properties:
+                  name:
+                    type: string
+                    description: 'string, name of the file to upload'
+                  size:
+                    type: integer
+                    description: File size.
+                  type:
+                    type: string
+                    description: File type.
+                  attachment:
+                    type: string
+                    description: A base64_encode(file)
+              examples:
+                example-1:
+                  value:
+                    name: restconfig.sql
+                    size: 922
+                    type: text/x-sql
+                    attachment: LS0KLS0gUmV0cmVpdmUgRG9jdW1lbnQgYW5kIENoYW5nZSBEb2N1bWVudCBjbGFzcwotLQp1cGRhdGUgdnRpZ2VyX3dzX29wZXJhdGlvbl9zZXEgc2V0IGlkPWlkKzE7CklOU0VSVCBJTlRPIGB2dGlnZXJfd3Nfb3BlcmF0aW9uYCAoCmBvcGVyYXRpb25pZGAsCmBuYW1lYCAsCmBoYW5kbGVyX3BhdGhgICwKYGhhbmRsZXJfbWV0aG9kYCAsCmB0eXBlYCAsCmBwcmVsb2dpbmAKKQpWQUxVRVMgKAooc2VsZWN0IG1heChpZCkgZnJvbSB2dGlnZXJfd3Nfb3BlcmF0aW9uX3NlcSksJ3JldHJpZXZlZG9jYXR0YWNobWVudCcsICdpbmNsdWRlL1dlYnNlcnZpY2VzL1JldHJpZXZlRG9jQXR0YWNobWVudC5waHAnLCAndnR3c19yZXRyaWV2ZWRvY2F0dGFjaG1lbnQnLCAnUE9TVCcsICcw
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: 'id '
+          description: A comma-separated list of document identifiers of which we want to get the attachments
+          required: true
+        - schema:
+            type: boolean
+          in: query
+          name: returnfile
+          description: '1 if we want the whole file, 0 if we just want the attachment information.'
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: operation
+          required: true
+          description: The opeeration name.
+        - schema:
+            type: string
+          in: query
+          name: sessionName
+          required: true
+          description: The session Id of the user.
+  /getRelatedRecords:
+    post:
+      operationId: getRelatedRecords
+      summary: Retrieve related records.
+      description: 'This web service interface function permits us to retrieve the set of related records that belong to any given record. '
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  description: The operation name.
+                sessionName:
+                  type: string
+                  description: The session Id of the user.
+                id:
+                  type: string
+                  description: Web service ID corresponding to the main record we want to relate.
+                module:
+                  type: string
+                  description: 'Module name of the id, this must be of the same type as the ID, if not an error will be returned.'
+                relatedModule:
+                  type: string
+                  description: 'The name of the module related to the main module, this represents the type of records to be returned.'
+              required:
+                - operation
+                - sessionName
+                - id
+                - module
+                - relatedModule
+            examples:
+              example-1:
+                value:
+                  operation: getRelatedRecords
+                  sessionName: 74b28658600dcf0e7157b
+                  id: 19x1
+                  module: Contacts
+                  relatedModule: Products
+        description: ''
+  /getRelatedRecordsThroughModule:
+    post:
+      operationId: getRelatedRecordsThroughModule
+      summary: List records related with a module.
+      description: ' In some use cases, it is useful to be able to get a list of records related at a second level.[read me](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:getrelatedrecords#getrelatedrecordsthroughmodule)'
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      records:
+                        type: array
+                        items:
+                          properties: {}
+                    required:
+                      - records
+                required:
+                  - success
+                  - result
+              examples:
+                example-1:
+                  value:
+                    success: true
+                    result:
+                      records: []
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  description: The operation name.
+                sessionName:
+                  type: string
+                  description: The session Id of the user.
+                id:
+                  type: string
+                  description: Web service ID of the main record.
+                module:
+                  type: string
+                  description: Module of the record in ID .
+                relatedModule:
+                  type: string
+                  description: Second level related module name we want to get the records from.
+                bridgeModule:
+                  type: string
+                  description: Direct related module name that connects the ID with the related module
+                queryParameters:
+                  type: string
+                  description: ' Additional parameters supported by the getRelatedRecords method.'
+              required:
+                - operation
+                - sessionName
+                - id
+                - module
+                - relatedModule
+                - bridgeModule
+                - queryParameters
+            examples:
+              example-1:
+                value:
+                  operation: getRelatedRecordsThroughModule
+                  sessionName: 74b28658600dcf0e7157b
+                  id: 19x1
+                  module: Invoice
+                  relatedModule: Contacts
+                  bridgeModule: Contacts
+                  queryParameters: string
+  /getProductImages:
+    get:
+      operationId: getProductImages
+      summary: Retrieve product image.
+      description: Fetching the product image by Id.
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  name:
+                    type: string
+                    minLength: 1
+                  path:
+                    type: string
+                  fullpath:
+                    type: string
+                  type:
+                    type: string
+                  id:
+                    type: string
+                required:
+                  - name
+                  - path
+                  - fullpath
+                  - type
+                  - id
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: id
+          description: The image Id.
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: operation
+          description: The operation name.
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: sessionName
+          description: The session Id.
+          required: true
+  /convertlead:
+    post:
+      operationId: ConvertLead
+      summary: Lead conversion
+      description: 'Permits the conversion of a lead into an account, contact and potential. This service is used by the application itself when converting leads.'
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Array with all the information of the new objects created.
+                items: {}
+              examples:
+                example-1:
+                  value:
+                    sessionName: fef54295fdb92649e542
+                    userId: 19x1
+                    version: '0.22'
+                    vtigerVersion: 5.5.0
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  description: The operation name.
+                sessionName:
+                  type: string
+                  description: ' session Id of the user.'
+                id:
+                  type: array
+                  description: $entityvalues is an array.
+                  items: {}
+            examples:
+              example-1:
+                value:
+                  operation: convertlead
+                  sessionName: 74b28658600dcf0e7157b
+                  id: '[]'
+        description: ''
+  /getRecordImages:
+    get:
+      operationId: getRecordImages
+      summary: Information about image attachments.
+      description: GetRecordImages allows a web service client to retrieve the information of the image attachments of a record.
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      results:
+                        type: number
+                    required:
+                      - results
+                required:
+                  - success
+                  - result
+              examples:
+                example-1:
+                  value:
+                    success: true
+                    result:
+                      results: 0
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: id
+          description: Web service id of the record with image fields we want to get.
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: operation
+          description: The operation name.
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: sessionName
+          description: The session Id of the user.
+          required: true
+  /addProductImages:
+    post:
+      operationId: addProductImages
+      summary: Adding attachment images.
+      description: Inserts a set of images into the Product multi-image field.
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: An array with information of the executed operations.
+                items: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: 'id '
+          description: 'Web service ID of the product record to upload the images to '
+          required: true
+        - schema:
+            type: array
+          in: query
+          name: files
+          description: 'An array of images to upload, each array entry must contain two fields  name and content (base64 encoded'
+          required: true
   /addTicketFaqComment:
     post:
       operationId: addTicketFaqComment
-      summary: Adding comments or FAQ.
+      summary: 9-Adding comments to special modules HelpDesk and FAQ
       description: Function used to add comments to Tickets (HelpDesK) and Frequently Asked Questions (Faq).
+      tags:
+        - CRUD Operations
       responses:
         '200':
           description: OK
@@ -227,6 +790,8 @@ paths:
       operationId: MassCreate
       summary: Create a set of records.
       description: 'Create many records and establish relationships among the different records. '
+      tags:
+        - CRUD Mass Operations
       responses:
         '200':
           description: OK
@@ -277,7 +842,8 @@ paths:
       operationId: MassRetrieve
       summary: Retrieve a set of records.
       description: Retrieve a set of records at once reducing the number of calls to an API.
-      tags: []
+      tags:
+        - CRUD Mass Operations
       responses:
         '200':
           description: OK
@@ -318,6 +884,8 @@ paths:
       operationId: MassUpdate
       summary: Modifying a set of records.
       description: Update a set of records at once as a single group.
+      tags:
+        - CRUD Mass Operations
       responses:
         '200':
           description: OK
@@ -366,6 +934,8 @@ paths:
       operationId: MassDelete
       summary: Deleting a set of entities
       description: Delete a set of records at once as a group.
+      tags:
+        - CRUD Mass Operations
       responses:
         '200':
           description: OK
@@ -422,8 +992,10 @@ paths:
   /ValidateInformation:
     post:
       operationId: ValidateInformation
-      summary: Validating configurations
+      summary: 10-Validate record informaton with application rules
       description: 'Apply application configured validations on a set of fields. [read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#validateinformation)'
+      tags:
+        - CRUD Operations
       responses:
         '200':
           description: OK
@@ -458,8 +1030,10 @@ paths:
   /CreateWithValidation:
     post:
       operationId: CreateWithValidation
-      summary: Validate and create.
+      summary: 11-Validate and create.
       description: Validate the information before creating a record.
+      tags:
+        - CRUD Operations
       responses:
         '201':
           description: Created
@@ -497,6 +1071,8 @@ paths:
       operationId: Upsert
       summary: Search and update or create a record.
       description: 'The upsert method will permit us to execute a search on some fields in a module. [read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#upsert)'
+      tags:
+        - CRUD Mass Operations
       responses:
         '200':
           description: OK
@@ -608,6 +1184,8 @@ paths:
       summary: Sets relations between one record and a set of other records.
       description: |
         Establish a direct relationship between two modules.
+      tags:
+        - Relation Operations
       responses:
         '204':
           description: No Content
@@ -655,6 +1233,8 @@ paths:
       operationId: UnsetRelation
       summary: Unbinding the relation between records.
       description: Deletes relations between one record and a set of other records.
+      tags:
+        - Relation Operations
       responses:
         '204':
           description: No Content
@@ -689,6 +1269,8 @@ paths:
       operationId: getfilterfields
       summary: Default fields from a given module.
       description: Retrieve the default list of fields to show in a list view along with the link field and pagesize.
+      tags:
+        - Metadata information
       responses:
         '200':
           description: OK
@@ -706,12 +1288,10 @@ paths:
                       fields:
                         type: array
                         items:
-                          required: []
                           properties: {}
                       linkfields:
                         type: array
                         items:
-                          required: []
                           properties: {}
                       pagesize:
                         type: number
@@ -775,6 +1355,8 @@ paths:
       operationId: getViewsByModule
       summary: Available filters from a module.
       description: 'Retrieve a list of available filters on a module with all the available information.[read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference&#getviewsbymodule)'
+      tags:
+        - Metadata information
       responses:
         '200':
           description: OK
@@ -818,7 +1400,6 @@ paths:
                               fields:
                                 type: array
                                 items:
-                                  required: []
                                   properties: {}
                               default:
                                 type: boolean
@@ -838,7 +1419,6 @@ paths:
                       linkfields:
                         type: array
                         items:
-                          required: []
                           properties: {}
                       pagesize:
                         type: number
@@ -899,6 +1479,8 @@ paths:
       operationId: getFiltersByModule
       summary: Available filters in a module with available informations.
       description: 'Retrieve a list of available filters on a module with all the available information. [read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference&#getfiltersbymodule)'
+      tags:
+        - Metadata information
       responses:
         '200':
           description: OK
@@ -944,7 +1526,6 @@ paths:
                               fields:
                                 type: array
                                 items:
-                                  required: []
                                   properties: {}
                               default:
                                 type: boolean
@@ -984,7 +1565,6 @@ paths:
                               fields:
                                 type: array
                                 items:
-                                  required: []
                                   properties: {}
                               default:
                                 type: boolean
@@ -1027,7 +1607,6 @@ paths:
                               fields:
                                 type: array
                                 items:
-                                  required: []
                                   properties: {}
                               default:
                                 type: boolean
@@ -1049,7 +1628,6 @@ paths:
                       linkfields:
                         type: array
                         items:
-                          required: []
                           properties: {}
                       pagesize:
                         type: number
@@ -1157,6 +1735,8 @@ paths:
       operationId: getPortalUserInfo
       summary: List available fields for a user.
       description: Retrieve a list of available fields for the connected user.
+      tags:
+        - Metadata information
       responses:
         '200':
           description: OK
@@ -1262,6 +1842,8 @@ paths:
       operationId: getPortalUserDateFormat
       summary: Date format
       description: Retrieve the date format of the connected user.
+      tags:
+        - Metadata information
       responses:
         '200':
           description: OK
@@ -1302,6 +1884,8 @@ paths:
       operationId: getAllUsers
       summary: All user names
       description: Retrieve a list of all existing users names.
+      tags:
+        - Metadata information
       responses:
         '200':
           description: OK
@@ -1353,7 +1937,8 @@ paths:
       operationId: getAssignedUserList
       summary: All users with access to a module.
       description: Retrieve a list of all users with access to a module.
-      tags: []
+      tags:
+        - Metadata information
       responses:
         '200':
           description: OK
@@ -1400,6 +1985,8 @@ paths:
       operationId: getUsersInSameGroup
       summary: users within a group
       description: Return all the users in the groups that the given user is part of.
+      tags:
+        - Metadata information
       responses:
         '200':
           description: OK
@@ -1414,7 +2001,6 @@ paths:
                   result:
                     type: array
                     items:
-                      required: []
                       properties: {}
                 required:
                   - success
@@ -1448,6 +2034,8 @@ paths:
       operationId: getReferenceValue
       summary: Entity names from IDs
       description: Convert web service IDs into their entity names.
+      tags:
+        - Other Information
       responses:
         '200':
           description: OK
@@ -1494,7 +2082,8 @@ paths:
       operationId: getModulePermissionQuery
       summary: List permissions
       description: 'Returns SQL query restrictions that must be applied to enforce application permissions.[read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#getmodulepermissionquery)'
-      tags: []
+      tags:
+        - Other Information
       responses:
         '200':
           description: OK
@@ -1555,6 +2144,8 @@ paths:
       operationId: getPicklistValues
       summary: Picklist field of a given module.
       description: Get picklist fields for the given module and all their possible values.
+      tags:
+        - Other Information
       responses:
         '200':
           description: OK
@@ -1651,6 +2242,8 @@ paths:
       operationId: gettranslation
       summary: Translate
       description: This method permits us to use the translations in the application in our frontend application.
+      tags:
+        - Other Information
       responses:
         '200':
           description: OK
@@ -1783,91 +2376,13 @@ paths:
                 - message
   /sync:
     $ref: 'paths/sync.yaml#/sync'
-  /getRecordImages:
-    get:
-      operationId: getRecordImages
-      summary: Information about image attachments.
-      description: GetRecordImages allows a web service client to retrieve the information of the image attachments of a record.
-      tags: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: object
-                    properties:
-                      results:
-                        type: number
-                    required:
-                      - results
-                required:
-                  - success
-                  - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result:
-                      results: 0
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: id
-          description: Web service id of the record with image fields we want to get.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          description: The operation name.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          description: The session Id of the user.
-          required: true
-  /addProductImages:
-    post:
-      operationId: addProductImages
-      summary: Adding attachment images.
-      description: Inserts a set of images into the Product multi-image field.
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                description: An array with information of the executed operations.
-                items: {}
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: 'id '
-          description: 'Web service ID of the product record to upload the images to '
-          required: true
-        - schema:
-            type: array
-          in: query
-          name: files
-          description: 'An array of images to upload, each array entry must contain two fields  name and content (base64 encoded'
-          required: true
   /getFieldAutocomplete:
     get:
       operationId: getFieldAutocomplete
       summary: Autocompletion.
       description: Executes a search in the list of fields of a module for the given term with the selected operator.
-      tags: []
+      tags:
+        - Other Information
       responses:
         '200':
           description: OK
@@ -1968,7 +2483,8 @@ paths:
       operationId: getReferenceAutocomplete
       summary: Autocompletion and searching.
       description: Executes a search in the entity fields of the given modules for the given term with the selected operator.
-      tags: []
+      tags:
+        - Other Information
       responses:
         '200':
           description: OK
@@ -2047,426 +2563,13 @@ paths:
           name: sessionName
           description: The session Id of the user.
           required: true
-  /convertlead:
-    post:
-      operationId: ConvertLead
-      summary: Lead conversion
-      description: 'Permits the conversion of a lead into an account, contact and potential. This service is used by the application itself when converting leads.'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                description: Array with all the information of the new objects created.
-                items: {}
-              examples:
-                example-1:
-                  value:
-                    sessionName: fef54295fdb92649e542
-                    userId: 19x1
-                    version: '0.22'
-                    vtigerVersion: 5.5.0
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                operation:
-                  type: string
-                  description: The operation name.
-                sessionName:
-                  type: string
-                  description: ' session Id of the user.'
-                id:
-                  type: array
-                  description: $entityvalues is an array.
-                  items: {}
-            examples:
-              example-1:
-                value:
-                  operation: convertlead
-                  sessionName: 74b28658600dcf0e7157b
-                  id: '[]'
-        description: ''
-  /extendsession:
-    post:
-      operationId: ExtendSession
-      summary: Renewing token expiration time.
-      description: 'This method will detect the existing session and return a validated login session for the web service API.(read me)[http://corebos.com/documentation/doku.php?id=en:devel:corebosws:manual:session&#extendsession]'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                description: ''
-                properties:
-                  sessionName:
-                    type: string
-                    description: Validated session ID to use in subsequent calls.
-                  userId:
-                    type: string
-                    description: Web service ID of the connected user.
-                  version:
-                    type: string
-                    description: coreBOS and web service version numbers.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                operation:
-                  type: string
-                sessionName:
-                  type: string
-              required:
-                - operation
-                - sessionName
-            examples:
-              example-1:
-                value:
-                  operation: extendsession
-                  sessionName: 74b28658600dcf0e7157b
-        description: ''
-  /authenticateContact:
-    post:
-      operationId: authenticateContact
-      summary: Validates a contact access to the portal
-      description: The contact must have an active portal access with correct access dates and give the correct email and password.
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: boolean
-                required:
-                  - success
-                  - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result: false
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                operation:
-                  type: string
-                  description: The operation name.
-                sessionName:
-                  type: string
-                  description: SessionID of the loggedin user.
-                password:
-                  type: string
-                  description: Password sent to the contact when he was activated in the application
-                email:
-                  type: string
-                  description: Primary email of the contact in the application
-              required:
-                - operation
-                - sessionName
-                - password
-                - email
-            examples:
-              example-1:
-                value:
-                  operation: authenticateContact
-                  sessionName: 74b28658600dcf0e7157b
-                  password: '@1475charity'
-                  email: charity.mbisi@axelera.io
-        description: ''
-  /changePortalUserPassword:
-    post:
-      operationId: changePortalUserPassword
-      summary: ''
-      description: Updating vtiger user portal information.
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: integer
-                description: Returns the number of affected rows.
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                operation:
-                  type: string
-                  description: The operation name.
-                sessionName:
-                  type: string
-                  description: Session Id of the logged in user.
-                email:
-                  type: string
-                  description: User email.
-                newPass:
-                  type: string
-                  description: New password of the user.
-              required:
-                - operation
-                - sessionName
-                - email
-                - newPass
-            examples:
-              example-1:
-                value:
-                  operation: changePortalUserPassword
-                  sessionName: 74b28658600dcf0e7157b
-                  email: charity.mbisi@axelera.io
-                  newPass: 1475charity
-        description: ''
-  /loginPortal:
-    get:
-      operationId: loginPortal
-      summary: This method returns a valid logged in session with the internal "portal" user
-      description: Validates a contact access to the portal the contact must have an active portal access with correct access dates and give the correct email and password.
-      tags: []
-      responses:
-        '200':
-          description: OK
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: email
-          description: The email of the logged in user.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: password
-          description: User account password.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          description: The operation name.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          description: The session Id .
-          required: true
-  /retrievedocattachment:
-    get:
-      operationId: retrievedocattachment
-      summary: Returns the base64 encoded file attached to the given document.
-      description: Obtain information of the attachment of a document without downloading the whole file which would slow many operations.
-      tags: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                description: An object with the fields of the attachment. For each given identifier we will get an array with this structure.
-                properties:
-                  name:
-                    type: string
-                    description: 'string, name of the file to upload'
-                  size:
-                    type: integer
-                    description: File size.
-                  type:
-                    type: string
-                    description: File type.
-                  attachment:
-                    type: string
-                    description: A base64_encode(file)
-              examples:
-                example-1:
-                  value:
-                    name: restconfig.sql
-                    size: 922
-                    type: text/x-sql
-                    attachment: LS0KLS0gUmV0cmVpdmUgRG9jdW1lbnQgYW5kIENoYW5nZSBEb2N1bWVudCBjbGFzcwotLQp1cGRhdGUgdnRpZ2VyX3dzX29wZXJhdGlvbl9zZXEgc2V0IGlkPWlkKzE7CklOU0VSVCBJTlRPIGB2dGlnZXJfd3Nfb3BlcmF0aW9uYCAoCmBvcGVyYXRpb25pZGAsCmBuYW1lYCAsCmBoYW5kbGVyX3BhdGhgICwKYGhhbmRsZXJfbWV0aG9kYCAsCmB0eXBlYCAsCmBwcmVsb2dpbmAKKQpWQUxVRVMgKAooc2VsZWN0IG1heChpZCkgZnJvbSB2dGlnZXJfd3Nfb3BlcmF0aW9uX3NlcSksJ3JldHJpZXZlZG9jYXR0YWNobWVudCcsICdpbmNsdWRlL1dlYnNlcnZpY2VzL1JldHJpZXZlRG9jQXR0YWNobWVudC5waHAnLCAndnR3c19yZXRyaWV2ZWRvY2F0dGFjaG1lbnQnLCAnUE9TVCcsICcw
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: 'id '
-          description: A comma-separated list of document identifiers of which we want to get the attachments
-          required: true
-        - schema:
-            type: boolean
-          in: query
-          name: returnfile
-          description: '1 if we want the whole file, 0 if we just want the attachment information.'
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          required: true
-          description: The opeeration name.
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          required: true
-          description: The session Id of the user.
-  /getRelatedRecords:
-    post:
-      operationId: getRelatedRecords
-      summary: Retrieve related records.
-      description: 'This web service interface function permits us to retrieve the set of related records that belong to any given record. '
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                operation:
-                  type: string
-                  description: The operation name.
-                sessionName:
-                  type: string
-                  description: The session Id of the user.
-                id:
-                  type: string
-                  description: Web service ID corresponding to the main record we want to relate.
-                module:
-                  type: string
-                  description: 'Module name of the id, this must be of the same type as the ID, if not an error will be returned.'
-                relatedModule:
-                  type: string
-                  description: 'The name of the module related to the main module, this represents the type of records to be returned.'
-              required:
-                - operation
-                - sessionName
-                - id
-                - module
-                - relatedModule
-            examples:
-              example-1:
-                value:
-                  operation: getRelatedRecords
-                  sessionName: 74b28658600dcf0e7157b
-                  id: 19x1
-                  module: Contacts
-                  relatedModule: Products
-        description: ''
-  /getRelatedRecordsThroughModule:
-    post:
-      operationId: getRelatedRecordsThroughModule
-      summary: List records related with a module.
-      description: ' In some use cases, it is useful to be able to get a list of records related at a second level.[read me](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:getrelatedrecords#getrelatedrecordsthroughmodule)'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: object
-                    properties:
-                      records:
-                        type: array
-                        items:
-                          required: []
-                          properties: {}
-                    required:
-                      - records
-                required:
-                  - success
-                  - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result:
-                      records: []
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                operation:
-                  type: string
-                  description: The operation name.
-                sessionName:
-                  type: string
-                  description: The session Id of the user.
-                id:
-                  type: string
-                  description: Web service ID of the main record.
-                module:
-                  type: string
-                  description: Module of the record in ID .
-                relatedModule:
-                  type: string
-                  description: Second level related module name we want to get the records from.
-                bridgeModule:
-                  type: string
-                  description: Direct related module name that connects the ID with the related module
-                queryParameters:
-                  type: string
-                  description: ' Additional parameters supported by the getRelatedRecords method.'
-              required:
-                - operation
-                - sessionName
-                - id
-                - module
-                - relatedModule
-                - bridgeModule
-                - queryParameters
-            examples:
-              example-1:
-                value:
-                  operation: getRelatedRecordsThroughModule
-                  sessionName: 74b28658600dcf0e7157b
-                  id: 19x1
-                  module: Invoice
-                  relatedModule: Contacts
-                  bridgeModule: Contacts
-                  queryParameters: string
   /SearchGlobalVar:
     get:
       operationId: SearchGlobalVariable
       summary: Get the values of global variables.
       description: 'This method allows customization of behavior of the application to their requirements, taking the configuration and customization of coreBOS to a whole new level.[read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#searchglobalvar)'
-      tags: []
+      tags:
+        - Other Information
       responses:
         '200':
           description: OK
@@ -2520,63 +2623,13 @@ paths:
           name: sessionName
           required: true
           description: The session Id .
-  /getProductImages:
-    get:
-      operationId: getProductImages
-      summary: Retrieve product image.
-      description: Fetching the product image by Id.
-      tags: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  name:
-                    type: string
-                    minLength: 1
-                  path:
-                    type: string
-                  fullpath:
-                    type: string
-                  type:
-                    type: string
-                  id:
-                    type: string
-                required:
-                  - name
-                  - path
-                  - fullpath
-                  - type
-                  - id
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: id
-          description: The image Id.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          description: The operation name.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          description: The session Id.
-          required: true
   /getLoginPage:
     get:
       operationId: getLoginPage
       summary: Request the login page.
       description: Getting the login page.
-      tags: []
+      tags:
+        - Other Information
       responses:
         '200':
           description: OK
@@ -2630,6 +2683,8 @@ paths:
       operationId: ExecuteWorkflow
       summary: Execute work flow.
       description: Execute work flow.
+      tags:
+        - Other operations
       responses:
         '200':
           description: OK
@@ -2638,7 +2693,6 @@ paths:
               schema:
                 type: object
                 properties: {}
-      parameters: []
       requestBody:
         content:
           application/json:
@@ -2675,7 +2729,8 @@ paths:
       operationId: QuestionAnswer
       summary: Question and answers.
       description: Get questions and answers by Id.
-      tags: []
+      tags:
+        - Other operations
       responses: {}
       parameters:
         - schema:
@@ -2701,7 +2756,8 @@ paths:
       operationId: Rules
       summary: coreBOS Rules service.
       description: To execute a decision map and get the result we use the coreBOS Rules service. coreBOS Rule will see that the given map is actually a decision table and will evaluate the map with the given context.
-      tags: []
+      tags:
+        - Other operations
       responses:
         '200':
           description: OK
@@ -3080,7 +3136,7 @@ paths:
       operationId: getMaxLoadSize
       summary: Returns the configured PHP Maximum upload size limit
       tags:
-        - Metadata information
+        - Other Information
       responses:
         '200':
           description: return max upload size
