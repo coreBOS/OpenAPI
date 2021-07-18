@@ -7,7 +7,7 @@ revise:
     tags:
       - CRUD Operations
     responses:
-      '201':
+      '200':
         description: Returns updated record or error
         content:
           application/json:

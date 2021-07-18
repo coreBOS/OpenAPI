@@ -103,3 +103,45 @@ CHANGE_PASSWORD_FAILURE:
         message:
           type: string
           example: Failed to change password
+INVALID_ID_ATTRIBUTE:
+  type: object
+  description: given ID is not a valid type for the operation
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: INVALID_ID_ATTRIBUTE
+      properties:
+        code:
+          type: string
+          example: INVALID_ID_ATTRIBUTE
+        message:
+          type: string
+          example: Id specified is incorrect
+RECORD_NOT_FOUND:
+  type: object
+  description: given ID is not found error
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: RECORD_NOT_FOUND
+      properties:
+        code:
+          type: string
+          example: RECORD_NOT_FOUND
+        message:
+          type: string
+          example: Record you are trying to access is not found

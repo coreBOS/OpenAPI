@@ -1,0 +1,96 @@
+AddImagesGood:
+  type: object
+  description: images added correctly response
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: array
+      description: result of the add operation
+      uniqueItems: true
+      minItems: 1
+      items:
+        properties:
+          FileName:
+            type: array
+            description: list of added file names
+            uniqueItems: true
+            minItems: 1
+            items:
+              type: string
+              example: 'productimage543'
+          Error:
+            type: boolean
+            description: if one or more images were not inserted
+            example: 0
+          ImagesAtStart:
+            type: integer
+            description: number of images in the product field before adding images
+            example: 4
+          NumberToAdd:
+            type: integer
+            description: number of images to add to the product
+            example: 4
+          ImagesAtFinish:
+            type: integer
+            description: number of images in the product field after adding images
+            example: 8
+          MaxImages:
+            type: integer
+            description: maximum number of images permitted in the product field
+            example: 12
+AddImagesBad:
+  type: object
+  description: images added incorrectly response
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: array
+      description: result of the add operation
+      uniqueItems: true
+      minItems: 1
+      items:
+        properties:
+          FileName:
+            type: array
+            description: list of added file names
+            uniqueItems: true
+            minItems: 1
+            items:
+              type: string
+              example: 'productimage345'
+          Error:
+            type: boolean
+            description: if one or more images were not inserted
+            example: 1
+          ErrorStr:
+            type: string
+            description: inform on why there has been some error
+            example: Maximum number of images has been reached
+          ImagesAtStart:
+            type: integer
+            description: number of images in the product field before adding images
+            example: 8
+          NumberToAdd:
+            type: integer
+            description: number of images to add to the product
+            example: 6
+          ImagesAtFinish:
+            type: integer
+            description: number of images in the product field after adding images
+            example: 12
+          MaxImages:
+            type: integer
+            description: maximum number of images permitted in the product field
+            example: 12

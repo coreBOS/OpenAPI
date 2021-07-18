@@ -1,6 +1,6 @@
 APIAuthContactGood:
   type: object
-  description: invalid User web service ID
+  description: valid contact/employee authentication
   required:
     - success
     - result
@@ -15,7 +15,7 @@ APIAuthContactGood:
       example: 12x1084
 APIAuthContactBad:
   type: object
-  description: given password does not comply with security restrictions
+  description: invalid contact/employee authentication
   required:
     - success
     - result

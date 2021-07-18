@@ -243,78 +243,111 @@ paths:
                 - newOwnerId
                 - operation
                 - sessionName
-
-
   /addProductImages:
     post:
       operationId: addProductImages
-      summary: 07.- Add attachment images
-      description: Inserts a set of images into the Product multi-image field.
+      summary: 07.- Add attachment images to products
+      description: Inserts a set of images into the Product multi-image field
       tags:
         - CRUD Operations
       responses:
         '200':
-          description: OK
+          description: An array with information of the executed operations
           content:
             application/json:
               schema:
-                type: array
-                description: An array with information of the executed operations.
-                items: {}
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: 'id '
-          description: 'Web service ID of the product record to upload the images to '
-          required: true
-        - schema:
-            type: array
-          in: query
-          name: files
-          description: 'An array of images to upload, each array entry must contain two fields  name and content (base64 encoded'
-          required: true
+                oneOf:
+                  - $ref: 'components/APIProductResponse.yaml#/AddImagesGood'
+                  - $ref: 'components/APIProductResponse.yaml#/AddImagesBad'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: addProductImages
+                  example: addProductImages
+                  description: addProductImages
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                id:
+                  type: string
+                  description: Web service ID of the product record to upload the images to
+                  example: 14x2408
+                files:
+                  type: string
+                  description: |
+                    JSON string of an array of images to upload, each array entry must contain two fields:
+                    - name: name of the file to add
+                    - content: base64 encoded binary data of the image
+                  example: '[{"name": "productimage345", "content": "sll9032ef999..."},...]'
+              required:
+                - id
+                - files
+                - operation
+                - sessionName
   /addTicketFaqComment:
     post:
       operationId: addTicketFaqComment
       summary: 08.- Add comments to special modules HelpDesk and FAQ
-      description: Function used to add comments to Tickets (HelpDesK) and Frequently Asked Questions (Faq).
+      description: Function used to add comments to Tickets (HelpDesk) and Frequently Asked Questions (Faq)
       tags:
         - CRUD Operations
       responses:
         '200':
-          description: OK
+          description: An array with information of the record with the new comment
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/APICURRResponse.yaml#/APICURRResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+                  - $ref: 'components/APIMissingMandatoryFields.yaml#/APIMissingMandatoryFields'
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
-              description: ''
               properties:
                 operation:
                   type: string
-                  in: query
+                  default: addTicketFaqComment
                   example: addTicketFaqComment
-                  description: The operation id.
+                  description: addTicketFaqComment
                 sessionName:
                   type: string
-                  in: query
-                  example: 45d0c211602a0b7bb0075
-                  description: The session name of the logged in user.
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
                 id:
                   type: string
-                  in: query
-                  example: 10x64
-                  description: Web service id of the trouble ticket or faq to which we must attach the comment
+                  description: Web service ID of the HelpDesk/Faq record to add comments to
+                  example: 17x2642
                 values:
-                  type: array
-                  in: query
-                  example:
-                    comments: Valiantwstut2
-                    from_portal: 0
-                    parent_id: 4x22
-                  description: 'Array with the parameters of the comment. these parameters can be:''from_portal'' 0 or 1: 0 = ''user'', 1 = ''customer''''parent_id'' webservice id of the contact creating the comment from the portal''comments'' string, comment to add'
-                  items: {}
+                  type: string
+                  description: |
+                    JSON string with the parameters of the comment. these parameters can be:
+                    - from_portal: 0/1: 0 = "user", 1 = "customer"
+                    - parent_id: webservice id of the contact creating the comment from the portal
+                    - comments: string, comment to add
+                  example: '{"from_portal": "0", "parent_id": "4x22", "comments": "some comment"}'
+              required:
+                - id
+                - values
+                - operation
+                - sessionName
+
+
   /retrievedocattachment:
     get:
       operationId: retrievedocattachment
