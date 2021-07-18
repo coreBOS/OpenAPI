@@ -1,0 +1,49 @@
+loginPortal:
+  get:
+    operationId: loginPortal
+    summary: 5.- This method returns a valid logged in session with the internal "portal" user
+    description: Validates a contact access to the API and returns a standard coreBOS user API access. [This is explained in detail here](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:manual:portallogin)
+    tags:
+      - login
+    parameters:
+      - schema:
+          type: string
+        in: query
+        name: operation
+        example: loginPortal
+        description: loginPortal
+        required: true
+      - schema:
+          type: string
+        in: query
+        name: username
+        example: dr_who@gallifrey.io
+        description: Primary email of the contact in the application
+        required: true
+      - schema:
+          type: string
+        in: query
+        name: password
+        example: k9
+        description: Password sent to the contact when he was activated in the application
+        required: true
+      - schema:
+          type: string
+        in: query
+        name: entity
+        example: Contacts
+        description: Contacts or Employee depending on where to validate the email and password
+        required: false
+    responses:
+      '200':
+        description: Return valid login information or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/APIPortalResponse.yaml#/APIPortalResponse'
+                - $ref: '../components/APILoginUserError.yaml#/APILoginUserError'
+                - $ref: '../components/APILoginAuthError.yaml#/APILoginAuthError'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+                - $ref: '../components/APIErrors.yaml#/INVALID_USER'
+                - $ref: '../components/APIAuthenticateError.yaml#/APIAuthenticateError'

@@ -1,0 +1,45 @@
+authenticateContact:
+  post:
+    operationId: authenticateContact
+    deprecated: true
+    summary: 4.- Validates a contact access to the API
+    description: |
+      The contact must have an active portal access with correct access dates and give the correct email and password in order to obtain a valid user session token. [This is explained in detail here](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:manual:portallogin)
+    tags:
+      - login
+    responses:
+      '200':
+        description: Returns created record or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/APIAuthContact.yaml#/APIAuthContactGood'
+                - $ref: '../components/APIAuthContact.yaml#/APIAuthContactBad'
+                - $ref: '../components/APISessionError.yaml#/APISessionError'
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              operation:
+                type: string
+                default: authenticateContact
+                example: authenticateContact
+                description: authenticateContact
+              sessionName:
+                type: string
+                example: 1a907f77602a37b70aa5d
+                description: active session ID
+              email:
+                type: string
+                example: dr_who@gallifrey.io
+                description: Primary email of the contact in the application
+              password:
+                type: string
+                example: k9
+                description: Password sent to the contact when he was activated in the application
+            required:
+              - operation
+              - sessionName

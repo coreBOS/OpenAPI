@@ -1,7 +1,7 @@
 retrieve:
   get:
     operationId: Retrieve
-    summary: 2-Retrieve the field values of the given record ID
+    summary: 02.- Retrieve the field values of a given record ID
     description: |
       Get all the fields of the given record that the user has access to. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#retrieve)
     tags:

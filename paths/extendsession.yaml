@@ -1,0 +1,31 @@
+extendsession:
+  post:
+    operationId: extendsession
+    summary: 3.- obtain a valid API token from a coreBOS logged in user session
+    description: |
+      This method will detect the existing session and return a validated login session for the web service API. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:manual:session&#extendsession)
+    tags:
+      - login
+    responses:
+      '200':
+        description: Returns created record or error
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/APILoginResponse.yaml#/APILoginResponse'
+                - $ref: '../components/APIAuthFailure.yaml#/APIAuthFailureError'
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              operation:
+                type: string
+                default: extendsession
+                example: extendsession
+                description: extendsession
+            required:
+              - operation
+              - sessionName

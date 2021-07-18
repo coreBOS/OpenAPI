@@ -1,7 +1,7 @@
 login:
   post:
     operationId: login
-    summary: Login to the API and get a session ID to access all the other methods
+    summary: 2.- Login to the API and get a session ID to access all the other methods
     description: |
       You need a valid coreBOS user to access the webservice. All the operations you can do through the REST interface will be limited by the coreBOS permission system of the connected user.
 

@@ -1,7 +1,7 @@
 create:
   post:
     operationId: Create
-    summary: 1-Creates a new record in the application.
+    summary: 01.- Create a new record in the application
     description: |
       [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#create)
     tags:

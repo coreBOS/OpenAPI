@@ -1,7 +1,7 @@
 getchallenge:
   get:
     operationId: getChallenge
-    summary: Get a challenge string to encode the access key for login.
+    summary: 1.- Get a challenge string to encode the access key for login.
     description: The login process is done in two steps, first we ask coreBOS for a challenge sequence and then we use the returned string to create an MD5 encoding of our access key for the final validation. [Read about the process here](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:login#get_challenge)
     tags:
       - login

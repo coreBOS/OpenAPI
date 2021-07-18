@@ -1,7 +1,7 @@
 update:
   post:
     operationId: Update
-    summary: 3-Updates ALL the fields of a given record
+    summary: 03.- Update ALL mandatory fields of a given record
     description: |
       [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#update)
     tags:

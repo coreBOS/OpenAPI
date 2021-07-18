@@ -1,0 +1,30 @@
+APIPortalResponse:
+  description: format of correct portal login response
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: object
+      properties:
+        sessionName:
+          type: string
+          example: c4ad8d35e8caa5f69e0e
+        id:
+          type: string
+          example: 19x5
+        user_name:
+          type: string
+          example: amypond
+        contactid:
+          type: string
+          example: 12x1084
+        language:
+          type: string
+          description: contact preferred language
+          example: es_es

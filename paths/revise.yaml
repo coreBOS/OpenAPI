@@ -1,7 +1,7 @@
 revise:
   post:
     operationId: Revise
-    summary: 4-Updates fields of a given record
+    summary: 04.- Update fields of a given record
     description: |
       Updating specific fields within a record, unlike update it is not mandatory to send all the mandatory fields. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#revise)
     tags:

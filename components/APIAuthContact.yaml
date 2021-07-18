@@ -1,0 +1,30 @@
+APIAuthContactGood:
+  type: object
+  description: invalid User web service ID
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: string
+      description: Valid contact web service ID
+      example: 12x1084
+APIAuthContactBad:
+  type: object
+  description: given password does not comply with security restrictions
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: boolean
+      description: "false"
+      example: false

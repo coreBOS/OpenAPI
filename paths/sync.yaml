@@ -1,7 +1,7 @@
 sync:
   get:
     operationId: SyncInformation
-    summary: Returns a list of record changes since a given date
+    summary: Return a list of record changes since a given date
     description: |
       The sync service returns the complete set of changes that occurred to all records accessible to the connected user from a given date and time. [read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#sync)
     tags:

@@ -1,0 +1,21 @@
+APIAuthFailureError:
+  type: object
+  description: format of incorrect extended session login authentication response
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: AUTHENTICATION_FAILURE
+      properties:
+        code:
+          type: string
+          example: AUTHENTICATION_FAILURE
+        message:
+          type: string
+          example: a user session could not be found
