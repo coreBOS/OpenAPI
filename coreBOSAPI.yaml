@@ -672,17 +672,14 @@ paths:
               properties:
                 operation:
                   type: string
-                  in: query
                   example: ValidateInformation
                   description: The operation name.
                 sessionName:
                   type: string
-                  in: query
                   example: 1a907f77602a37b70aa5d
                   description: The session Id of the loggen in user.
                 context:
                   type: string
-                  in: query
                   example: '{}'
                   description: An Object with the field-value pairs to validate. Either a “module” or a “record” entry must exist in the object. If “record” is given the validations will be evaluated with the fields of the record.
   /CreateWithValidation:
@@ -759,17 +756,14 @@ paths:
               properties:
                 elements:
                   type: string
-                  in: query
                   example: {}
                   description: 'An array of Object to create, Each element of the array represents a record to be created.'
                 sessionName:
                   type: string
                   description: The session Id of the logged in user.
-                  in: query
                   example: 1a907f77602a37b70aa5d
                 operation:
                   type: string
-                  in: query
                   example: MassCreate
                   description: The operation name being performed.
               required:
@@ -852,16 +846,13 @@ paths:
                 operation:
                   type: string
                   description: The operation name.
-                  in: query
                   example: MassUpdate
                 sessionName:
                   type: string
-                  in: query
                   example: 1a907f77602a37b70aa5d
                   description: The session Id of the user.
                 elements:
                   type: string
-                  in: query
                   example: {}
                   description: An array of objects to update.
               required:
@@ -909,16 +900,13 @@ paths:
                 operation:
                   type: string
                   description: The operation name.
-                  in: query
                   example: MassDelete
                 sessionName:
                   type: string
                   description: The session Id.
-                  in: query
                   example: 1a907f77602a37b70aa5d
                 ids:
                   type: array
-                  in: query
                   example:
                     - 19x1
                     - 19x6
@@ -1005,32 +993,26 @@ paths:
                 operation:
                   type: string
                   description: The operation name.
-                  in: query
                   example: upsert
                 sessionName:
                   type: string
                   description: The session id of the user.
-                  in: query
                   example: 1a907f77602a37b70aa5d
                 elementType:
                   type: string
                   description: Module name where we search and operate.
-                  in: query
                   example: Contacts
                 element:
                   type: array
                   description: Record object with fields to update/create
                   items: {}
-                  in: query
                   example: '{"email":"contact@nodomain.tld","assistant":"Test A & C","firstname":"Stéphanie","lastname":"anonymous","mobile":"09988559","assigned_user_id":"19x5"}'
                 searchOn:
                   type: string
-                  in: query
                   example: email
                   description: 'Comma-separated list of fields to search on, the values will be obtained from element.'
                 updatedfields:
                   type: string
-                  in: query
                   example: 'email,firstname,lastname,assistant'
                   description: 'Comma-separated list of fields to update if the record is found, the values will be obtained from element.'
               required:
@@ -1061,21 +1043,17 @@ paths:
                 operation:
                   type: string
                   description: Operation name.
-                  in: query
                   example: SetRelation
                 sessionName:
                   type: string
                   description: The session Id of the logged in user.
-                  in: query
                   example: 1a907f77602a37b70aa5d
                 relate_this_id:
                   type: string
                   description: Web service ID of the main record to relate.
-                  in: query
                   example: 12x1084
                 with_these_ids:
                   type: string
-                  in: query
                   example: ' [''14x11'',''15x1'']'
                   description: Array of web service IDs to relate to the main record.
               required:
@@ -1110,7 +1088,6 @@ paths:
                 operation:
                   type: string
                   description: The operation name.
-                  in: query
                   example: U
                 sessionName:
                   type: string
@@ -2593,7 +2570,14 @@ paths:
       description: Get questions and answers by Id.
       tags:
         - Other operations
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
       parameters:
         - schema:
             type: string
