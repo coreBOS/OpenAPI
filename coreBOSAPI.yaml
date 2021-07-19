@@ -346,68 +346,136 @@ paths:
                 - values
                 - operation
                 - sessionName
-
-
   /retrievedocattachment:
-    get:
+    post:
       operationId: retrievedocattachment
-      summary: 09.- Return the base64 encoded file attached to the given document
-      description: Obtain information of the attachment of a document without downloading the whole file which would slow many operations.
+      summary: 09.- Return the base64 encoded file attached to the given documents
+      description: Obtain information of the attachment of a document without downloading the whole file which would slow many operations
       tags:
         - CRUD Operations
       responses:
         '200':
-          description: OK
+          description: An object with the information of the attachment for each given ID
           content:
             application/json:
               schema:
-                type: object
-                description: An object with the fields of the attachment. For each given identifier we will get an array with this structure.
-                properties:
-                  name:
-                    type: string
-                    description: 'string, name of the file to upload'
-                  size:
-                    type: integer
-                    description: File size.
-                  type:
-                    type: string
-                    description: File type.
-                  attachment:
-                    type: string
-                    description: A base64_encode(file)
-              examples:
-                example-1:
-                  value:
-                    name: restconfig.sql
-                    size: 922
-                    type: text/x-sql
-                    attachment: LS0KLS0gUmV0cmVpdmUgRG9jdW1lbnQgYW5kIENoYW5nZSBEb2N1bWVudCBjbGFzcwotLQp1cGRhdGUgdnRpZ2VyX3dzX29wZXJhdGlvbl9zZXEgc2V0IGlkPWlkKzE7CklOU0VSVCBJTlRPIGB2dGlnZXJfd3Nfb3BlcmF0aW9uYCAoCmBvcGVyYXRpb25pZGAsCmBuYW1lYCAsCmBoYW5kbGVyX3BhdGhgICwKYGhhbmRsZXJfbWV0aG9kYCAsCmB0eXBlYCAsCmBwcmVsb2dpbmAKKQpWQUxVRVMgKAooc2VsZWN0IG1heChpZCkgZnJvbSB2dGlnZXJfd3Nfb3BlcmF0aW9uX3NlcSksJ3JldHJpZXZlZG9jYXR0YWNobWVudCcsICdpbmNsdWRlL1dlYnNlcnZpY2VzL1JldHJpZXZlRG9jQXR0YWNobWVudC5waHAnLCAndnR3c19yZXRyaWV2ZWRvY2F0dGFjaG1lbnQnLCAnUE9TVCcsICcw
+                oneOf:
+                  - $ref: 'components/APIDocResponse.yaml#/RetrieveDocResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: retrievedocattachment
+                  example: retrievedocattachment
+                  description: retrievedocattachment
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                id:
+                  type: string
+                  description: A comma-separated list of document identifiers of which we want to get the attachments
+                  example: 15x44166,15x44168
+                returnfile:
+                  type: boolean
+                  description: 1 if we want the whole file, 0 if we just want the attachment information
+                  example: true
+              required:
+                - id
+                - operation
+                - sessionName
+  /getProductImages:
+    get:
+      operationId: getProductImages
+      summary: 10.- Retrieve product images
+      description: Return an array of images related to the given product
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: An object with the information of the images of the given ID
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/APIDocResponse.yaml#/RetrieveImagesResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
       parameters:
         - schema:
             type: string
           in: query
-          name: 'id '
-          description: A comma-separated list of document identifiers of which we want to get the attachments
-          required: true
-        - schema:
-            type: boolean
-          in: query
-          name: returnfile
-          description: '1 if we want the whole file, 0 if we just want the attachment information.'
-          required: true
-        - schema:
-            type: string
-          in: query
           name: operation
+          example: getProductImages
+          description: getProductImages
           required: true
-          description: The opeeration name.
         - schema:
             type: string
           in: query
           name: sessionName
+          example: 3fde6cf960edb4e9e91e3
+          description: The session ID
           required: true
-          description: The session Id of the user.
+        - schema:
+            type: string
+          in: query
+          name: id
+          description: The product record web service ID
+          example: 14x2808
+          required: true
+  /getRecordImages:
+    get:
+      operationId: getRecordImages
+      summary: 11.- Retrieve record images
+      description: Retrieve the information of the image attachments of a record
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: An object with the information of the images of the given ID
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/APIDocResponse.yaml#/RetrieveImagesResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: operation
+          example: getRecordImages
+          description: getRecordImages
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: sessionName
+          example: 3fde6cf960edb4e9e91e3
+          description: The session ID
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: id
+          description: The record web service ID
+          example: 12x1084
+          required: true
+
+
   /getRelatedRecords:
     post:
       operationId: getRelatedRecords
@@ -542,111 +610,6 @@ paths:
                   relatedModule: Contacts
                   bridgeModule: Contacts
                   queryParameters: string
-  /getProductImages:
-    get:
-      operationId: getProductImages
-      summary: 10.- Retrieve product images
-      description: Fetching the product image by Id.
-      tags:
-        - CRUD Operations
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  name:
-                    type: string
-                    minLength: 1
-                  path:
-                    type: string
-                  fullpath:
-                    type: string
-                  type:
-                    type: string
-                  id:
-                    type: string
-                required:
-                  - name
-                  - path
-                  - fullpath
-                  - type
-                  - id
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: id
-          description: The image Id.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          description: The operation name.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          description: The session Id.
-          required: true
-  /getRecordImages:
-    get:
-      operationId: getRecordImages
-      summary: 11.- Retrieve record images
-      description: GetRecordImages allows a web service client to retrieve the information of the image attachments of a record.
-      tags:
-        - CRUD Operations
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: object
-                    properties:
-                      results:
-                        type: number
-                    required:
-                      - results
-                required:
-                  - success
-                  - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result:
-                      results: 0
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: id
-          description: Web service id of the record with image fields we want to get.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          description: The operation name.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          description: The session Id of the user.
-          required: true
   /ValidateInformation:
     post:
       operationId: ValidateInformation
@@ -903,7 +866,7 @@ paths:
                   example: MassDelete
                 sessionName:
                   type: string
-                  description: The session Id.
+                  description: The session ID
                   example: 1a907f77602a37b70aa5d
                 ids:
                   type: array
@@ -1173,7 +1136,7 @@ paths:
                 sessionName:
                   type: string
                   minLength: 1
-                  description: The session Id.
+                  description: The session ID
                 module:
                   type: string
                   minLength: 1
@@ -1308,7 +1271,7 @@ paths:
                   description: The operation name.
                 sessionName:
                   type: string
-                  description: The session Id.
+                  description: The session ID
                 module:
                   type: string
                   description: Module name.
@@ -2316,7 +2279,7 @@ paths:
           in: query
           name: sessionName
           required: true
-          description: The session Id.
+          description: The session ID
   /getReferenceAutocomplete:
     get:
       operationId: getReferenceAutocomplete
@@ -2543,7 +2506,7 @@ paths:
                   description: The operation name.
                 sessionName:
                   type: string
-                  description: The session Id.
+                  description: The session ID
                 workflow:
                   type: string
                   description: Workflow.
@@ -2810,7 +2773,7 @@ paths:
           in: query
           name: sessionName
           example: 3fde6cf960edb4e9e91e3
-          description: The session Id.
+          description: The session ID
           required: true
   /getpdfdata:
     post:
@@ -2925,7 +2888,7 @@ paths:
           in: query
           name: sessionName
           example: 3fde6cf960edb4e9e91e3
-          description: The session Id.
+          description: The session ID
           required: true
       responses:
         '200':
@@ -2964,7 +2927,7 @@ paths:
           in: query
           name: sessionName
           example: 3fde6cf960edb4e9e91e3
-          description: The session Id.
+          description: The session ID
           required: true
       responses:
         '200':

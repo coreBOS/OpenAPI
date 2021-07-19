@@ -49,5 +49,5 @@ sync:
         in: query
         name: sessionName
         example: 3fde6cf960edb4e9e91e3
-        description: The session Id.
+        description: The session ID
         required: true

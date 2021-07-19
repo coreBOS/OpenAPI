@@ -147,3 +147,86 @@ ConvertFileResponse:
   required:
     - success
     - result
+RetrieveDocResponse:
+  description: Document attachment information response
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: object
+      description: set of document information
+      example: '{"15x44166":{"recordid":"44166","filetype":"","filename":"https:\/\/somewhere in the world","filesize":0,"attachment":""}}}'
+      properties:
+        recordid:
+          type: string
+          description: document internal ID
+          example: 44166
+        filetype:
+          type: string
+          description: file mime type
+          example: text/html
+        filename:
+          type: string
+          description: name of the file
+          example: somefilename
+        filesize:
+          type: integer
+          description: size of the file in bytes
+          example: 98735
+        attachment:
+          type: string
+          description: base64 encoded file contents
+          example: "93h4nuhfdh948herfds..."
+  required:
+    - success
+    - result
+RetrieveImagesResponse:
+  description: Image attachment information response
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "true"
+      example: true
+    result:
+      type: object
+      description: set of related images
+      properties:
+        results:
+          type: integer
+          description: total number of images
+          example: 4
+        images:
+          type: object
+          description: array of image information per field
+          properties:
+            fieldname:
+              type: object
+              description: field name that contains the image
+              properties:
+                name:
+                  type: string
+                  description: name of the file
+                  example: somefilename
+                path:
+                  type: string
+                  description: path of the file
+                  example: storage/year/month/week/name.ext
+                fullpath:
+                  type: string
+                  description: full URL path of the file
+                  example: https://your_server/your_corebos/storage/year/month/week/name.ext
+                type:
+                  type: string
+                  description: file mime type
+                  example: text/html
+                id:
+                  type: string
+                  description: attachment internal ID
+                  example: 54166
+  required:
+    - success
+    - result
