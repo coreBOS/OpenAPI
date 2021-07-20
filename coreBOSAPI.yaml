@@ -1364,148 +1364,122 @@ paths:
         - Metadata information
       responses:
         '200':
-          description: OK
+          description: connected user fields
           content:
             application/json:
               schema:
-                description: ''
                 type: object
                 properties:
                   success:
                     type: boolean
+                    example: true
                   result:
                     type: object
                     properties:
                       date_format:
                         type: string
-                        minLength: 1
+                        example: yyyy-mm-dd
                       first_name:
                         type: string
+                        example:
                       last_name:
                         type: string
-                        minLength: 1
+                        example: Administrator
                       email1:
                         type: string
-                        minLength: 1
+                        example: noreply@tsolucio.com
                       is_admin:
                         type: string
-                        minLength: 1
+                        example: on
                       roleid:
                         type: string
-                        minLength: 1
+                        example: H2
                       rolename:
                         type: string
-                        minLength: 1
+                        example: CEO
                       language:
                         type: string
-                        minLength: 1
+                        example: en_us
                       currency_grouping_pattern:
                         type: string
-                        minLength: 1
+                        example: 123,456,789
                       currency_decimal_separator:
                         type: string
-                        minLength: 1
+                        example: .
                       currency_grouping_separator:
                         type: string
-                        minLength: 1
+                        example: ','
                       currency_symbol_placement:
                         type: string
-                        minLength: 1
+                        example: $1.0
                       id:
                         type: string
-                        minLength: 1
-                    required:
-                      - date_format
-                      - first_name
-                      - last_name
-                      - email1
-                      - is_admin
-                      - roleid
-                      - rolename
-                      - language
-                      - currency_grouping_pattern
-                      - currency_decimal_separator
-                      - currency_grouping_separator
-                      - currency_symbol_placement
-                      - id
+                        example: 19x1
                 required:
                   - success
                   - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result:
-                      date_format: yyyy-mm-dd
-                      first_name: ''
-                      last_name: Administrator
-                      email1: charity.mbisi@axelera.io
-                      is_admin: 'on'
-                      roleid: H2
-                      rolename: CEO
-                      language: en_us
-                      currency_grouping_pattern: '123,456,789'
-                      currency_decimal_separator: .
-                      currency_grouping_separator: ','
-                      currency_symbol_placement: $1.0
-                      id: 19x1
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: operation
-          required: true
-          description: The operation name.
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          required: true
-          description: The session Id of the user.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: getPortalUserInfo
+                  example: getPortalUserInfo
+                  description: getPortalUserInfo
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+              required:
+                - operation
+                - sessionName
   /getPortalUserDateFormat:
     post:
       operationId: getPortalUserDateFormat
       summary: 10.- Connected portal user date format
-      description: Retrieve the date format of the connected user.
+      description: Retrieve the date format of the connected user
       tags:
         - Metadata information
       responses:
         '200':
-          description: OK
+          description: connected user date format
           content:
             application/json:
               schema:
-                description: ''
                 type: object
                 properties:
                   success:
                     type: boolean
+                    example: true
                   result:
-                    type: string
-                    minLength: 1
+                      type: string
+                      example: yyyy-mm-dd
                 required:
                   - success
                   - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result: yyyy-mm-dd
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: operation
-          description: The operation name.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          description: The session Id of the user.
-          required: true
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: getPortalUserDateFormat
+                  example: getPortalUserDateFormat
+                  description: getPortalUserDateFormat
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+              required:
+                - operation
+                - sessionName
   /getAllUsers:
-    post:
+    get:
       operationId: getAllUsers
       summary: 06.- Retrieve all user names
       description: Retrieve a list of all existing users names
@@ -1513,49 +1487,38 @@ paths:
         - Metadata information
       responses:
         '200':
-          description: OK
+          description: relation of all user names in the application
           content:
             application/json:
               schema:
-                description: ''
                 type: object
                 properties:
                   success:
                     type: boolean
+                    example: true
                   result:
                     type: object
                     properties:
-                      19x1:
+                      userid:
                         type: string
-                        minLength: 1
-                      19x5:
-                        type: string
-                        minLength: 1
-                    required:
-                      - 19x1
-                      - 19x5
+                        example: Clara Oswald
                 required:
                   - success
                   - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result:
-                      19x1: ' Administrator'
-                      19x5: Clara Oswald
       parameters:
         - schema:
             type: string
           in: query
           name: operation
-          description: The operation name.
+          example: getAllUsers
+          description: getAllUsers
           required: true
         - schema:
             type: string
           in: query
           name: sessionName
-          description: The session ID of the user.
+          example: 3fde6cf960edb4e9e91e3
+          description: The session ID
           required: true
   /getAssignedUserList:
     get:
@@ -1566,98 +1529,105 @@ paths:
         - Metadata information
       responses:
         '200':
-          description: OK
+          description: relation of all user names with access to the given module
           content:
             application/json:
               schema:
-                description: ''
                 type: object
                 properties:
                   success:
                     type: boolean
+                    example: true
                   result:
                     type: array
-                    items: {}
+                    description: user id and name with access to the module
+                    items:
+                      type: object
+                      properties:
+                        userid:
+                          type: string
+                          example: 19x2
+                        username:
+                          type: string
+                          example: Clara Oswald
                 required:
                   - success
                   - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result: '[{"userid":"19x1","username":"Administrator"},{"userid":"19x5","username":"Clara Oswald"}]'
       parameters:
         - schema:
             type: string
           in: query
-          name: module
-          description: Module name to get the users from.
-          required: true
-        - schema:
-            type: string
-          in: query
           name: operation
-          description: The operation name.
+          example: getAssignedUserList
+          description: getAssignedUserList
           required: true
         - schema:
             type: string
           in: query
           name: sessionName
-          description: The session name.
+          example: 3fde6cf960edb4e9e91e3
+          description: The session ID
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: module
+          description: Module name to get the users for
+          example: Contacts
           required: true
   /getUsersInSameGroup:
     post:
       operationId: getUsersInSameGroup
-      summary: 08.- Retrieve all users within a group
+      summary: 08.- Retrieve all users who share a group with the given user
       description: Return all the users in the groups that the given user is part of
       tags:
         - Metadata information
       responses:
         '200':
-          description: OK
+          description: relation of all user names in the application
           content:
             application/json:
               schema:
-                description: ''
                 type: object
                 properties:
                   success:
                     type: boolean
+                    example: true
                   result:
-                    type: array
-                    items:
-                      properties: {}
+                    type: object
+                    properties:
+                      userid:
+                        type: string
+                        example: Clara Oswald
                 required:
                   - success
                   - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result: []
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: id
-          description: 'UserId to get the group users for. Note, application ID not web service ID'
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          description: The operation name.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          description: The session name.
-          required: true
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: getUsersInSameGroup
+                  example: getUsersInSameGroup
+                  description: getUsersInSameGroup
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                id:
+                  type: string
+                  example: 5
+                  description: user id of shared group. **Note:** this endpoint uses normal user ID, not web service ID
+              required:
+                - operation
+                - sessionName
   /getReferenceValue:
     get:
       operationId: getReferenceValue
-      summary: Convert record IDs into their represntative entity names
+      summary: Convert record IDs into their representative entity names
       description: Convert web service IDs into their entity names.
       tags:
         - Other Information
