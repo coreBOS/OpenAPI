@@ -30,3 +30,176 @@ APIResponseValidationFalse:
       items:
         type: string
         example: name cannot be duplicated
+FilterFields:
+  description: module default filter information
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: true
+      example: true
+    result:
+      type: object
+      description: filter information
+      properties:
+        fields:
+          type: array
+          description: list of fields to show
+          items:
+            type: string
+            example: fieldname
+        linkfields:
+          type: array
+          description: list of link fields to show
+          items:
+            type: string
+            example: fieldname
+        pagesize:
+          type: integer
+          description: number of rows per page in list
+          example: 40
+FilterInfoResponse:
+  description: module filter information
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: true
+      example: true
+    result:
+      type: object
+      description: filter information
+      properties:
+        filters:
+          type: array
+          description: array of detailed filter information
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: name of the filter
+                example: Contacts Address
+              status:
+                type: string
+                description: shared status
+                example: 3
+              advcriteria:
+                type: string
+                description: coreBOS custom view filter condition format
+                example: '[]'
+              advcriteriaWQL:
+                type: string
+                description: coreBOS web service query language conditions
+              advcriteriaEVQL:
+                type: string
+                description: coreBOS web service extended query language conditions
+              stdcriteria:
+                type: string
+                description: coreBOS custom view filter condition format for dates
+                example: '[]'
+              stdcriteriaWQL:
+                type: string
+                description: coreBOS web service query language conditions for dates
+              stdcriteriaEVQL:
+                type: string
+                description: coreBOS web service extended query language conditions for dates
+              fields:
+                type: array
+                description: list of fields to show
+                items:
+                  type: string
+                  example: fieldname
+              default:
+                type: boolean
+                description: if this filter is or not the default filter of the module for this user
+                example: true
+        linkfields:
+          type: array
+          description: list of link fields to show
+          items:
+            type: string
+            example: fieldname
+        pagesize:
+          type: integer
+          description: number of rows per page in list
+          example: 40
+FilterInfoHTMLResponse:
+  description: module filter information
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: true
+      example: true
+    result:
+      type: object
+      description: filter information
+      properties:
+        html:
+          type: string
+          description: select HTML options to pick a filter
+          example: <option value='4'>All</option><option value='6'>New This Week [ Administrator] </option><option value='5'>Prospect Accounts [ Administrator] </option>
+        filters:
+          type: array
+          description: array of detailed filter information
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: name of the filter
+                example: Contacts Address
+              status:
+                type: string
+                description: shared status
+                example: 3
+              advcriteria:
+                type: string
+                description: coreBOS custom view filter condition format
+                example: '[]'
+              advcriteriaWQL:
+                type: string
+                description: coreBOS web service query language conditions
+              advcriteriaEVQL:
+                type: string
+                description: coreBOS web service extended query language conditions
+              stdcriteria:
+                type: string
+                description: coreBOS custom view filter condition format for dates
+                example: '[]'
+              stdcriteriaWQL:
+                type: string
+                description: coreBOS web service query language conditions for dates
+              stdcriteriaEVQL:
+                type: string
+                description: coreBOS web service extended query language conditions for dates
+              fields:
+                type: array
+                description: list of fields to show
+                items:
+                  type: string
+                  example: fieldname
+              default:
+                type: boolean
+                description: if this filter is or not the default filter of the module for this user
+                example: true
+        linkfields:
+          type: array
+          description: list of link fields to show
+          items:
+            type: string
+            example: fieldname
+        pagesize:
+          type: integer
+          description: number of rows per page in list
+          example: 40

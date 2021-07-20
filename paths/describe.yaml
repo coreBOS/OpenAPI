@@ -1,7 +1,7 @@
 describe:
   get:
     operationId: Describe
-    summary: Detailed information about a module
+    summary: 02.- Detailed information about a module
     description: |
       The Describe service gives us detailed information about the module. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference&#describe)'
     tags:

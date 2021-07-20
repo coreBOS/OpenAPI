@@ -250,3 +250,24 @@ INVALID_PARAMETER:
         message:
           type: string
           example: Invalid parameter
+INVALID_MODULE:
+  type: object
+  description: the given module parameter is incorrect
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: INVALID_MODULE
+      properties:
+        code:
+          type: string
+          example: INVALID_MODULE
+        message:
+          type: string
+          example: Invalid module parameter

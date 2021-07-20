@@ -1237,474 +1237,129 @@ paths:
   /getfilterfields:
     post:
       operationId: getfilterfields
-      summary: Default list fields to represent a row of a module
-      description: Retrieve the default list of fields to show in a list view along with the link field and pagesize.
+      summary: 03.- Default list fields to represent a row of a module
+      description: Retrieve the default list of fields to show in a list view along with the link field and pagesize
       tags:
         - Metadata information
       responses:
         '200':
-          description: OK
+          description: Returns updated record or error
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: object
-                    properties:
-                      fields:
-                        type: array
-                        items:
-                          properties: {}
-                      linkfields:
-                        type: array
-                        items:
-                          properties: {}
-                      pagesize:
-                        type: number
-                    required:
-                      - fields
-                      - linkfields
-                      - pagesize
-                required:
-                  - success
-                  - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result:
-                      fields:
-                        - contact_no
-                        - firstname
-                        - lastname
-                        - title
-                        - account_id
-                        - email
-                        - phone
-                        - assigned_user_id
-                      linkfields:
-                        - firstname
-                        - lastname
-                      pagesize: 20
+                oneOf:
+                  - $ref: 'components/APIResponse.yaml#/FilterFields'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
-              description: ''
               type: object
               properties:
                 operation:
                   type: string
-                  minLength: 1
-                  description: The operation name.
+                  default: getfilterfields
+                  example: getfilterfields
+                  description: getfilterfields
                 sessionName:
                   type: string
-                  minLength: 1
-                  description: The session ID
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
                 module:
                   type: string
-                  minLength: 1
-                  description: Module name to get the fields for.
+                  description: Module name to get the fields for
+                  example: Contacts
               required:
+                - module
                 - operation
                 - sessionName
-                - module
-            examples:
-              example-1:
-                value:
-                  operation: getfilterfields
-                  sessionName: 4bc61da6005b272d47db
-                  module: Contacts
-        description: ''
   /getViewsByModule:
-    post:
+    get:
       operationId: getViewsByModule
-      summary: Available filters of a module
-      description: 'Retrieve a list of available filters on a module with all the available information.[read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference&#getviewsbymodule)'
+      summary: 04.- Available filters of a module
+      description: Retrieve a list of available filters on a module with all the available information. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference&#getviewsbymodule)
       tags:
         - Metadata information
       responses:
         '200':
-          description: OK
+          description: Returns information of filters in the module or error
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: object
-                    properties:
-                      filters:
-                        type: object
-                        properties:
-                          '7':
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                minLength: 1
-                              status:
-                                type: string
-                                minLength: 1
-                              advcriteria:
-                                type: string
-                                minLength: 1
-                              advcriteriaWQL:
-                                type: string
-                              advcriteriaEVQL:
-                                type: string
-                              stdcriteria:
-                                type: string
-                                minLength: 1
-                              stdcriteriaWQL:
-                                type: string
-                              stdcriteriaEVQL:
-                                type: string
-                              fields:
-                                type: array
-                                items:
-                                  properties: {}
-                              default:
-                                type: boolean
-                            required:
-                              - name
-                              - status
-                              - advcriteria
-                              - advcriteriaWQL
-                              - advcriteriaEVQL
-                              - stdcriteria
-                              - stdcriteriaWQL
-                              - stdcriteriaEVQL
-                              - fields
-                              - default
-                        required:
-                          - '7'
-                      linkfields:
-                        type: array
-                        items:
-                          properties: {}
-                      pagesize:
-                        type: number
-                    required:
-                      - filters
-                      - linkfields
-                      - pagesize
-                required:
-                  - success
-                  - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result:
-                      filters:
-                        '7':
-                          name: All
-                          status: '0'
-                          advcriteria: '[]'
-                          advcriteriaWQL: ''
-                          advcriteriaEVQL: ''
-                          stdcriteria: '[]'
-                          stdcriteriaWQL: ''
-                          stdcriteriaEVQL: ''
-                          fields:
-                            - contact_no
-                            - firstname
-                            - lastname
-                            - title
-                            - account_id
-                            - email
-                            - phone
-                            - assigned_user_id
-                          default: true
-                      linkfields:
-                        - firstname
-                        - lastname
-                      pagesize: 20
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                operation:
-                  type: string
-                  description: The operation name.
-                sessionName:
-                  type: string
-                  description: The session ID
-                module:
-                  type: string
-                  description: Module name.
-        description: ''
+                oneOf:
+                  - $ref: 'components/APIResponse.yaml#/FilterInfoResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_MODULE'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: operation
+          example: getViewsByModule
+          description: getViewsByModule
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: sessionName
+          example: 3fde6cf960edb4e9e91e3
+          description: The session ID
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: module
+          example: Accounts
+          description: module for which we want filter information
+          required: true
   /getFiltersByModule:
     post:
       operationId: getFiltersByModule
-      summary: Available filters in a module with available informations
-      description: 'Retrieve a list of available filters on a module with all the available information. [read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference&#getfiltersbymodule)'
+      summary: 05.- Available filters of a module with HTML output
+      description: |
+        The same as [getViewsByModule](#get-/getViewsByModule) plus an HTML select element to pick the filters from
       tags:
         - Metadata information
       responses:
         '200':
-          description: OK
+          description: Returns information of filters in the module or error
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: object
-                    properties:
-                      html:
-                        type: string
-                        minLength: 1
-                      filters:
-                        type: object
-                        properties:
-                          '7':
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                minLength: 1
-                              status:
-                                type: string
-                                minLength: 1
-                              advcriteria:
-                                type: string
-                                minLength: 1
-                              advcriteriaWQL:
-                                type: string
-                              advcriteriaEVQL:
-                                type: string
-                              stdcriteria:
-                                type: string
-                              stdcriteriaWQL:
-                                type: string
-                              stdcriteriaEVQL:
-                                type: string
-                              fields:
-                                type: array
-                                items:
-                                  properties: {}
-                              default:
-                                type: boolean
-                            required:
-                              - name
-                              - status
-                              - advcriteria
-                              - advcriteriaWQL
-                              - advcriteriaEVQL
-                              - stdcriteria
-                              - stdcriteriaWQL
-                              - stdcriteriaEVQL
-                              - fields
-                              - default
-                          '8':
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                minLength: 1
-                              status:
-                                type: string
-                                minLength: 1
-                              advcriteria:
-                                type: string
-                                minLength: 1
-                              advcriteriaWQL:
-                                type: string
-                              advcriteriaEVQL:
-                                type: string
-                              stdcriteria:
-                                type: string
-                              stdcriteriaWQL:
-                                type: string
-                              stdcriteriaEVQL:
-                                type: string
-                              fields:
-                                type: array
-                                items:
-                                  properties: {}
-                              default:
-                                type: boolean
-                            required:
-                              - name
-                              - status
-                              - advcriteria
-                              - advcriteriaWQL
-                              - advcriteriaEVQL
-                              - stdcriteria
-                              - stdcriteriaWQL
-                              - stdcriteriaEVQL
-                              - fields
-                              - default
-                          '9':
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                minLength: 1
-                              status:
-                                type: string
-                                minLength: 1
-                              advcriteria:
-                                type: string
-                                minLength: 1
-                              advcriteriaWQL:
-                                type: string
-                              advcriteriaEVQL:
-                                type: string
-                              stdcriteria:
-                                type: string
-                                minLength: 1
-                              stdcriteriaWQL:
-                                type: string
-                                minLength: 1
-                              stdcriteriaEVQL:
-                                type: string
-                                minLength: 1
-                              fields:
-                                type: array
-                                items:
-                                  properties: {}
-                              default:
-                                type: boolean
-                            required:
-                              - name
-                              - status
-                              - advcriteria
-                              - advcriteriaWQL
-                              - advcriteriaEVQL
-                              - stdcriteria
-                              - stdcriteriaWQL
-                              - stdcriteriaEVQL
-                              - fields
-                              - default
-                        required:
-                          - '7'
-                          - '8'
-                          - '9'
-                      linkfields:
-                        type: array
-                        items:
-                          properties: {}
-                      pagesize:
-                        type: number
-                    required:
-                      - html
-                      - filters
-                      - linkfields
-                      - pagesize
-                required:
-                  - success
-                  - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result:
-                      html: <option value='7'>All</option><option value='8'>Contacts Address</option><option value='9'>Todays Birthday</option>
-                      filters:
-                        '7':
-                          name: All
-                          status: '0'
-                          advcriteria: '[]'
-                          advcriteriaWQL: ''
-                          advcriteriaEVQL: ''
-                          stdcriteria: ''
-                          stdcriteriaWQL: ''
-                          stdcriteriaEVQL: ''
-                          fields:
-                            - contact_no
-                            - firstname
-                            - lastname
-                            - title
-                            - account_id
-                            - email
-                            - phone
-                            - assigned_user_id
-                          default: true
-                        '8':
-                          name: Contacts Address
-                          status: '3'
-                          advcriteria: '[]'
-                          advcriteriaWQL: ''
-                          advcriteriaEVQL: ''
-                          stdcriteria: ''
-                          stdcriteriaWQL: ''
-                          stdcriteriaEVQL: ''
-                          fields:
-                            - firstname
-                            - lastname
-                            - mailingstreet
-                            - mailingcity
-                            - mailingstate
-                            - mailingzip
-                            - mailingcountry
-                          default: false
-                        '9':
-                          name: Todays Birthday
-                          status: '3'
-                          advcriteria: '[]'
-                          advcriteriaWQL: ''
-                          advcriteriaEVQL: ''
-                          stdcriteria: 'DATE_FORMAT(vtiger_contactsubdetails.birthday, ''%m%d'') BETWEEN DATE_FORMAT(''2021-01-18 00:00:00'', ''%m%d'') and DATE_FORMAT(''2021-01-18 23:59:00'', ''%m%d'')'
-                          stdcriteriaWQL: 'DATE_FORMAT(vtiger_contactsubdetails.birthday, ''%m%d'') BETWEEN DATE_FORMAT(''2021-01-18 00:00:00'', ''%m%d'') and DATE_FORMAT(''2021-01-18 23:59:00'', ''%m%d'')'
-                          stdcriteriaEVQL: '{"fieldname":"birthday","operation":"between","value":"2021-01-18,2021-01-18","valuetype":"rawtext","joincondition":"and","groupid":949027805}'
-                          fields:
-                            - firstname
-                            - lastname
-                            - title
-                            - account_id
-                            - email
-                            - otherphone
-                            - assigned_user_id
-                          default: false
-                      linkfields:
-                        - firstname
-                        - lastname
-                      pagesize: 20
+                oneOf:
+                  - $ref: 'components/APIResponse.yaml#/FilterInfoHTMLResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
-                  description: The operation name.
+                  default: getFiltersByModule
+                  example: getFiltersByModule
+                  description: regetFiltersByModulevise
                 sessionName:
                   type: string
-                  description: The session name.
+                  example: 3fde6cf960edb4e9e91e3
+                  description: active session ID
                 module:
                   type: string
-                  description: The module name.
+                  description: module for which we want filter information
+                  example: Accounts
               required:
+                - module
                 - operation
                 - sessionName
-                - module
-            examples:
-              example-1:
-                value:
-                  operation: getFiltersByModule
-                  sessionName: 4bc61da6005b272d47db
-                  module: Contacts
   /getPortalUserInfo:
     post:
       operationId: getPortalUserInfo
-      summary: Metadata of the connected portal user
-      description: Retrieve a list of available fields for the connected user.
+      summary: 09.- Metadata of the connected portal user
+      description: Retrieve a list of available fields for the connected user
       tags:
         - Metadata information
       responses:
@@ -1810,7 +1465,7 @@ paths:
   /getPortalUserDateFormat:
     post:
       operationId: getPortalUserDateFormat
-      summary: Connected portal user date format
+      summary: 10.- Connected portal user date format
       description: Retrieve the date format of the connected user.
       tags:
         - Metadata information
@@ -1852,8 +1507,8 @@ paths:
   /getAllUsers:
     post:
       operationId: getAllUsers
-      summary: Retrieve all user names
-      description: Retrieve a list of all existing users names.
+      summary: 06.- Retrieve all user names
+      description: Retrieve a list of all existing users names
       tags:
         - Metadata information
       responses:
@@ -1905,8 +1560,8 @@ paths:
   /getAssignedUserList:
     get:
       operationId: getAssignedUserList
-      summary: Retrieve all users with access to a module
-      description: Retrieve a list of all users with access to a module.
+      summary: 07.- Retrieve all users with access to a module
+      description: Retrieve a list of all users with access to a module
       tags:
         - Metadata information
       responses:
@@ -1953,8 +1608,8 @@ paths:
   /getUsersInSameGroup:
     post:
       operationId: getUsersInSameGroup
-      summary: Retrieve all users within a group
-      description: Return all the users in the groups that the given user is part of.
+      summary: 08.- Retrieve all users within a group
+      description: Return all the users in the groups that the given user is part of
       tags:
         - Metadata information
       responses:
