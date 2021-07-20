@@ -474,216 +474,367 @@ paths:
           description: The record web service ID
           example: 12x1084
           required: true
-
-
   /getRelatedRecords:
     post:
       operationId: getRelatedRecords
-      summary: 12.- Retrieve related records.
-      description: 'This web service interface function permits us to retrieve the set of related records that belong to any given record. '
+      summary: 12.- Retrieve related records
+      description: Retrieve the set of related records of a module that belong to any given record. [Additional Information](https://corebos.com/documentation/doku.php?id=en:devel:corebosws:getrelatedrecords)
       tags:
         - CRUD Operations
       responses:
         '200':
-          description: OK
+          description: Returns set of related records or error
           content:
             application/json:
               schema:
-                type: object
-                properties: {}
-      parameters: []
+                oneOf:
+                  - $ref: 'components/APIQueryResponse.yaml#/APIQueryResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIErrors.yaml#/OPERATION_NOT_SUPPORTED'
+                  - $ref: 'components/APIErrors.yaml#/UNKNOWN_ENTITY'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIErrors.yaml#/MODULES_NOT_RELATED'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
-                  description: The operation name.
+                  default: getRelatedRecords
+                  example: getRelatedRecords
+                  description: getRelatedRecords
                 sessionName:
                   type: string
-                  description: The session Id of the user.
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
                 id:
                   type: string
-                  description: Web service ID corresponding to the main record we want to relate.
+                  description: Web service ID corresponding to the main record we want to get the related records from
+                  example: 12x44499
                 module:
                   type: string
-                  description: 'Module name of the id, this must be of the same type as the ID, if not an error will be returned.'
+                  description: module name of the Web service ID
+                  example: Contacts
                 relatedModule:
                   type: string
-                  description: 'The name of the module related to the main module, this represents the type of records to be returned.'
+                  description: The name of the module related to the main module, this represents the type of records to be returned
+                  example: HelpDesk
+                queryParameters:
+                  type: object
+                  description: parameters to modify the query and set of returned results in different ways
+                  properties:
+                    productDiscriminator:
+                      type: string
+                      description: ProductBundle|ProductParent|ProductLineInvoice{Only}|ProductLineSalesOrder{Only}|ProductLineQuote{Only}|ProductLineAll|ProductLineNone
+                      example: ProductLineSalesOrderOnly
+                    limit:
+                      type: integer
+                      description: number of records to return
+                      example: 50
+                    offset:
+                      type: integer
+                      description: number of records to jump over before stating to return results (pagination)
+                      example: 15
+                    orderby:
+                      type: string
+                      description: a syntactically and semantically correct order by directive wihtout the "order by"
+                      example: ticket_title
+                    columns:
+                      type: string
+                      description: a comma separated string of column names that are to be returned
+                      example: ticket_title,priority
+                    relationtouse:
+                      type: string
+                      description: label of the relation to select when more than one is found
+                    returnattachments:
+                      type: boolean
+                      description: for Document module will return the file attached if present
+                      example: true
               required:
-                - operation
-                - sessionName
                 - id
                 - module
                 - relatedModule
-            examples:
-              example-1:
-                value:
-                  operation: getRelatedRecords
-                  sessionName: 74b28658600dcf0e7157b
-                  id: 19x1
-                  module: Contacts
-                  relatedModule: Products
-        description: ''
+                - operation
+                - sessionName
   /getRelatedRecordsThroughModule:
     post:
       operationId: getRelatedRecordsThroughModule
-      summary: 13.- Retrieve related records through another related with a module
-      description: ' In some use cases, it is useful to be able to get a list of records related at a second level.[read me](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:getrelatedrecords#getrelatedrecordsthroughmodule)'
+      summary: 13.- Retrieve related records through another related module
+      description: get a list of records related at a second level. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:getrelatedrecords#getrelatedrecordsthroughmodule)'
       tags:
         - CRUD Operations
       responses:
         '200':
-          description: OK
+          description: Returns set of related records or error
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: object
-                    properties:
-                      records:
-                        type: array
-                        items:
-                          properties: {}
-                    required:
-                      - records
-                required:
-                  - success
-                  - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result:
-                      records: []
-      parameters: []
+                oneOf:
+                  - $ref: 'components/APIQueryResponse.yaml#/APIQueryResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIErrors.yaml#/OPERATION_NOT_SUPPORTED'
+                  - $ref: 'components/APIErrors.yaml#/UNKNOWN_ENTITY'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIErrors.yaml#/MODULES_NOT_RELATED'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
-                  description: The operation name.
+                  default: getRelatedRecordsThroughModule
+                  example: getRelatedRecordsThroughModule
+                  description: getRelatedRecordsThroughModule
                 sessionName:
                   type: string
-                  description: The session Id of the user.
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
                 id:
                   type: string
-                  description: Web service ID of the main record.
+                  description: Web service ID corresponding to the main record we want to get the related records from
+                  example: 12x44499
                 module:
                   type: string
-                  description: Module of the record in ID .
+                  description: module name of the Web service ID
+                  example: Contacts
                 relatedModule:
                   type: string
-                  description: Second level related module name we want to get the records from.
+                  description: The name of the module related to the bridge module, this represents the type of records to be returned
+                  example: Projects
                 bridgeModule:
                   type: string
-                  description: Direct related module name that connects the ID with the related module
+                  description: The name of the module related to the main module
+                  example: HelpDesk
                 queryParameters:
-                  type: string
-                  description: ' Additional parameters supported by the getRelatedRecords method.'
+                  type: object
+                  description: parameters to modify the query and set of returned results in different ways
+                  properties:
+                    productDiscriminator:
+                      type: string
+                      description: ProductBundle|ProductParent|ProductLineInvoice{Only}|ProductLineSalesOrder{Only}|ProductLineQuote{Only}|ProductLineAll|ProductLineNone
+                      example: ProductLineSalesOrderOnly
+                    limit:
+                      type: integer
+                      description: number of records to return
+                      example: 50
+                    offset:
+                      type: integer
+                      description: number of records to jump over before stating to return results (pagination)
+                      example: 15
+                    orderby:
+                      type: string
+                      description: a syntactically and semantically correct order by directive wihtout the "order by"
+                      example: ticket_title
+                    columns:
+                      type: string
+                      description: a comma separated string of column names that are to be returned
+                      example: ticket_title,priority
+                    relationtouse:
+                      type: string
+                      description: label of the relation to select when more than one is found
+                    returnattachments:
+                      type: boolean
+                      description: for Document module will return the file attached if present
+                      example: true
               required:
-                - operation
-                - sessionName
                 - id
                 - module
                 - relatedModule
-                - bridgeModule
-                - queryParameters
-            examples:
-              example-1:
-                value:
-                  operation: getRelatedRecordsThroughModule
-                  sessionName: 74b28658600dcf0e7157b
-                  id: 19x1
-                  module: Invoice
-                  relatedModule: Contacts
-                  bridgeModule: Contacts
-                  queryParameters: string
+                - operation
+                - sessionName
   /ValidateInformation:
     post:
       operationId: ValidateInformation
       summary: 14.- Validate record informaton with application rules
-      description: 'Apply application configured validations on a set of fields. [read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#validateinformation)'
+      description: Apply application configured validations on a set of fields. [read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#validateinformation)
       tags:
         - CRUD Operations
       responses:
         '200':
-          description: OK
+          description: Returns true or false and a set of error messages
           content:
             application/json:
               schema:
-                type: boolean
-                description: If false is returned the result will contain an array wit all the validations that have failed
-        '201':
-          description: Created
+                oneOf:
+                  - $ref: 'components/APIResponse.yaml#/APIResponseTrue'
+                  - $ref: 'components/APIResponse.yaml#/APIResponseValidationFalse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_PARAMETER'
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
+                  default: ValidateInformation
                   example: ValidateInformation
-                  description: The operation name.
+                  description: ValidateInformation
                 sessionName:
                   type: string
                   example: 1a907f77602a37b70aa5d
-                  description: The session Id of the loggen in user.
-                context:
+                  description: active session ID
+                element:
                   type: string
-                  example: '{}'
-                  description: An Object with the field-value pairs to validate. Either a “module” or a “record” entry must exist in the object. If “record” is given the validations will be evaluated with the fields of the record.
+                  description: JSON string with the field-value pairs to validate. Either a “module” or a “record” entry must exist in the object. If “record” is given the validations will be evaluated with the fields of the record
+                  example: '{"id":"12x44499","phone":"123456789"}'
+              required:
+                - element
+                - operation
+                - sessionName
   /CreateWithValidation:
     post:
       operationId: CreateWithValidation
       summary: 15.- Validate and create
-      description: Validate the information before creating a record.
+      description: Validate the information before creating a record
       tags:
         - CRUD Operations
       responses:
-        '201':
-          description: Created
-      parameters: []
+        '200':
+          description: Returns the created object or false and a set of error messages
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/APICURRResponse.yaml#/APICURRResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+                  - $ref: 'components/APIMissingMandatoryFields.yaml#/APIMissingMandatoryFields'
+                  - $ref: 'components/APIResponse.yaml#/APIResponseValidationFalse'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_PARAMETER'
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
-              description: ''
               type: object
               properties:
                 operation:
                   type: string
-                  minLength: 1
-                  description: The operatin name.
+                  default: CreateWithValidation
+                  example: CreateWithValidation
+                  description: CreateWithValidation
                 sessionName:
                   type: string
-                  minLength: 1
-                  description: Session Id of the logged in user.
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
                 elementType:
                   type: string
-                  minLength: 1
-                  description: Name of the module for which the entry has to be created.
+                  description: Module name where we want to create the record
+                  example: Contacts
                 element:
                   type: string
-                  minLength: 1
-                  description: An array consiting of entity data.
+                  description: JSON string with all the field-value entries to save
+                  example: '{"firstname":"River","lastname":"Song","assigned_user_id":"19x5"}'
               required:
-                - operation
-                - sessionName
                 - elementType
                 - element
+                - operation
+                - sessionName
+  /UpdateWithValidation:
+    post:
+      operationId: UpdateWithValidation
+      summary: 16.- Validate and update (with all mandatory)
+      description: Validate the information before updating a record
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: Returns the updated object or false and a set of error messages
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/APICURRResponse.yaml#/APICURRResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+                  - $ref: 'components/APIMissingMandatoryFields.yaml#/APIMissingMandatoryFields'
+                  - $ref: 'components/APIResponse.yaml#/APIResponseValidationFalse'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_PARAMETER'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: UpdateWithValidation
+                  example: UpdateWithValidation
+                  description: UpdateWithValidation
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                element:
+                  type: string
+                  description: JSON string with all the field-value entries to save
+                  example: '{"firstname":"River","lastname":"Song","assigned_user_id":"19x5"}'
+              required:
+                - element
+                - operation
+                - sessionName
+  /ReviseWithValidation:
+    post:
+      operationId: ReviseWithValidation
+      summary: 17.- Validate and update fields
+      description: Validate the information before updating a record
+      tags:
+        - CRUD Operations
+      responses:
+        '200':
+          description: Returns the updated object or false and a set of error messages
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/APICURRResponse.yaml#/APICURRResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+                  - $ref: 'components/APIResponse.yaml#/APIResponseValidationFalse'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_PARAMETER'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: ReviseWithValidation
+                  example: ReviseWithValidation
+                  description: ReviseWithValidation
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                element:
+                  type: string
+                  description: JSON string with all the field-value entries to save
+                  example: '{"firstname":"River","lastname":"Song","assigned_user_id":"19x5"}'
+              required:
+                - element
+                - operation
+                - sessionName
+
+
   /MassCreate:
     post:
       operationId: MassCreate
@@ -988,80 +1139,97 @@ paths:
   /SetRelation:
     post:
       operationId: SetRelation
-      summary: Establish relations between one record and a set of other records.
-      description: |
-        Establish a direct relationship between two modules.
+      summary: Establish relations between one record and a set of other records
+      description: Establish a direct relationship between records in two different modules
       tags:
         - Relation Operations
       responses:
-        '204':
-          description: No Content
-      parameters: []
+        '200':
+          description: Returns true or error
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/APIResponse.yaml#/APIResponseTrue'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
-                  description: Operation name.
+                  default: SetRelation
                   example: SetRelation
+                  description: SetRelation
                 sessionName:
                   type: string
-                  description: The session Id of the logged in user.
                   example: 1a907f77602a37b70aa5d
+                  description: active session ID
                 relate_this_id:
                   type: string
-                  description: Web service ID of the main record to relate.
+                  description: Web service ID of the main record to relate
                   example: 12x1084
                 with_these_ids:
                   type: string
-                  example: ' [''14x11'',''15x1'']'
-                  description: Array of web service IDs to relate to the main record.
+                  description: JSON encoded array of web service IDs to relate to the main record
+                  example: '["14x11","15x1"]'
               required:
                 - operation
                 - sessionName
                 - relate_this_id
                 - with_these_ids
-            examples:
-              example-1:
-                value:
-                  operation: SetRelation
-                  sessionName: 4bc61da6005b272d47db
-                  relate_this_id: 12x22
-                  with_these_ids: ' [''14x11'',''15x1'']'
   /UnsetRelation:
     post:
       operationId: UnsetRelation
       summary: Unbind the relation between records
-      description: Deletes relations between one record and a set of other records.
+      description: Deletes relations between one record and a set of other records
       tags:
         - Relation Operations
       responses:
-        '204':
-          description: No Content
-      parameters: []
+        '200':
+          description: Returns true or error
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/APIResponse.yaml#/APIResponseTrue'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIErrors.yaml#/INVALID_ID_ATTRIBUTE'
+                  - $ref: 'components/APIErrors.yaml#/RECORD_NOT_FOUND'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
-                  description: The operation name.
-                  example: U
+                  default: SetRelation
+                  example: SetRelation
+                  description: SetRelation
                 sessionName:
                   type: string
-                  description: The session name.
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
                 unrelate_this_id:
                   type: string
-                  description: Web service ID of the main record to unrelate.
+                  description: Web service ID of the main record to unrelate
+                  example: 12x1084
                 with_these_ids:
-                  type: array
-                  description: Array of web service IDs to unrelate from the main record.
-                  items: {}
+                  type: string
+                  description: JSON encoded array of web service IDs to relate to the main record
+                  example: '["14x11","15x1"]'
+              required:
+                - operation
+                - sessionName
+                - unrelate_this_id
+                - with_these_ids
   /listtypes:
     $ref: 'paths/listtypes.yaml#/listtypes'
   /describe:

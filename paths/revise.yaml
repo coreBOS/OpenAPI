@@ -33,7 +33,7 @@ revise:
                 description: active session ID
               element:
                 type: string
-                description: JSON string with all the field-value entries to update. It is mandatory to set the ID field.
+                description: JSON string with all the field-value entries to update. It is mandatory to set the ID field
                 example: '{"id":"12x44499","phone":"123456789"}'
             required:
               - element

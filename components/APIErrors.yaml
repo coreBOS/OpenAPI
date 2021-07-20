@@ -145,3 +145,108 @@ RECORD_NOT_FOUND:
         message:
           type: string
           example: Record you are trying to access is not found
+OPERATION_NOT_SUPPORTED:
+  type: object
+  description: the requested operation is not compatible with the configuration of the application
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: OPERATION_NOT_SUPPORTED
+      properties:
+        code:
+          type: string
+          example: OPERATION_NOT_SUPPORTED
+        message:
+          type: string
+          example: Customer portal access with no contact information
+UNKNOWN_ENTITY:
+  type: object
+  description: module or record could not be found
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: UNKNOWN_ENTITY
+      properties:
+        code:
+          type: string
+          example: UNKNOWN_ENTITY
+        message:
+          type: string
+          example: Given related module cannot be found
+MODULES_NOT_RELATED:
+  type: object
+  description: Cannot find relation between the modules
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: MODULES_NOT_RELATED
+      properties:
+        code:
+          type: string
+          example: MODULES_NOT_RELATED
+        message:
+          type: string
+          example: Cannot find relation between the modules
+MANY_RELATIONS:
+  type: object
+  description: More than one relation exists between the modules
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: MANY_RELATIONS
+      properties:
+        code:
+          type: string
+          example: MANY_RELATIONS
+        message:
+          type: string
+          example: More than one relation exists between the modules
+INVALID_PARAMETER:
+  type: object
+  description: one of the given parameters is incorrect
+  required:
+    - success
+    - error
+  properties:
+    success:
+      type: boolean
+      description: "false"
+      example: false
+    error:
+      type: object
+      description: INVALID_PARAMETER
+      properties:
+        code:
+          type: string
+          example: INVALID_PARAMETER
+        message:
+          type: string
+          example: Invalid parameter

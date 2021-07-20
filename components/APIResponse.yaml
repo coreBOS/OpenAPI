@@ -1,0 +1,32 @@
+APIResponseTrue:
+  description: format of simple TRUE response
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: true
+      example: true
+    result:
+      type: boolean
+      description: it is true
+      example: true
+APIResponseValidationFalse:
+  description: format of validation error response
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: false
+      example: false
+    result:
+      type: array
+      description: error messages
+      items:
+        type: string
+        example: name cannot be duplicated
