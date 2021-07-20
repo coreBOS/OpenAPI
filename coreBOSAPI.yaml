@@ -833,309 +833,284 @@ paths:
                 - element
                 - operation
                 - sessionName
-
-
   /MassCreate:
     post:
       operationId: MassCreate
-      summary: Create a set of records
-      description: 'Create many records and establish relationships among the different records. '
+      summary: 01.- Create a set of records
+      description: Create many records and establish relationships among the different records in one call
       tags:
         - CRUD Mass Operations
       responses:
         '200':
-          description: OK
+          description: |
+            An object with two elements:
+            - success_creates: array of created Object
+            - failed_creates: array of records that could not be created with their error message
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  success_creates:
-                    type: array
-                    description: Array of created Object.
-                    items: {}
-                  failed_creates:
-                    type: array
-                    description: Array of Object that could not be created with their error message.
-                    items: {}
-        '201':
-          description: Records created.
-        '400':
-          description: Bad Request
+                  success:
+                    type: boolean
+                    description: "true"
+                    example: true
+                  result:
+                    type: object
+                    description: JSON object of the created records indexed by their web service ID
+                    properties:
+                      success_creates:
+                        type: array
+                        description: array of created records
+                        items: {}
+                      failed_creates:
+                        type: array
+                        description: array of records that could not be created with their error message
+                        items: {}
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
-                elements:
-                  type: string
-                  example: {}
-                  description: 'An array of Object to create, Each element of the array represents a record to be created.'
-                sessionName:
-                  type: string
-                  description: The session Id of the logged in user.
-                  example: 1a907f77602a37b70aa5d
                 operation:
                   type: string
+                  default: MassCreate
                   example: MassCreate
-                  description: The operation name being performed.
+                  description: MassCreate
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                elements:
+                  type: string
+                  description: |
+                    JSON string with all the records and field-value entries to create
+
+                    [Read about the suppported format in the documentation](https://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#crud_mass_operations)
               required:
                 - elements
-                - sessionName
                 - operation
+                - sessionName
   /MassRetrieve:
-    get:
+    post:
       operationId: MassRetrieve
-      summary: Retrieve a set of records
-      description: Retrieve a set of records at once reducing the number of calls to an API.
+      summary: 02.- Retrieve a set of records
+      description: Retrieve a set of records at once reducing the number of calls to the API
       tags:
         - CRUD Mass Operations
       responses:
         '200':
-          description: OK
+          description: array of retrieved records
           content:
             application/json:
               schema:
-                type: array
-                description: An array containing objects of the retrieved records.
-                items: {}
-              examples:
-                example-1:
-                  value:
-                    - null
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: ids
-          example: '19x1,19x6'
-          description: 'A comma-separated string of web service ID of the records to retrieve '
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          description: The operation name.
-          example: MassRetrieve
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          example: 1a907f77602a37b70aa5d
-          description: The session Id of the user.
-          required: true
+                properties:
+                  success:
+                    type: boolean
+                    description: "true"
+                    example: true
+                  result:
+                    type: object
+                    description: JSON object of the retrieved records indexed by their web service ID
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: MassRetrieve
+                  example: MassRetrieve
+                  description: MassRetrieve
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                ids:
+                  type: string
+                  description: comma-separated string with all the record IDs to retrieve
+                  example: 12x1084,11x74
+              required:
+                - ids
+                - operation
+                - sessionName
   /MassUpdate:
     post:
       operationId: MassUpdate
-      summary: Modify a set of records
-      description: Update a set of records at once as a single group.
+      summary: 03.- Update a set of records
+      description: Update a set of records at once as a single group
       tags:
         - CRUD Mass Operations
       responses:
         '200':
-          description: OK
+          description: |
+            An object with two elements:
+            - success_updates: array of updated records
+            - failed_updates: array of records that could not be updated with their error message
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  success_updates:
-                    type: array
-                    description: Array of updated IDs .
-                    items: {}
-                  failed_updates:
-                    type: array
-                    description: Array of IDs that could not be updated with their error message.
-                    items: {}
-        '201':
-          description: Records updated
+                  success:
+                    type: boolean
+                    description: "true"
+                    example: true
+                  result:
+                    type: object
+                    description: JSON object of the updated records indexed by their web service ID
+                    properties:
+                      success_updates:
+                        type: array
+                        description: array of updated records
+                        items: {}
+                      failed_updates:
+                        type: array
+                        description: array of records that could not be updated with their error message
+                        items: {}
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
-                  description: The operation name.
+                  default: MassUpdate
                   example: MassUpdate
+                  description: MassUpdate
                 sessionName:
                   type: string
                   example: 1a907f77602a37b70aa5d
-                  description: The session Id of the user.
+                  description: active session ID
                 elements:
                   type: string
-                  example: {}
-                  description: An array of objects to update.
+                  description: |
+                    JSON string with all the records and field-value entries to update
+
+                    [Read about the suppported format in the documentation](https://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#crud_mass_operations)
               required:
+                - elements
                 - operation
                 - sessionName
-                - elements
   /MassDelete:
     post:
       operationId: MassDelete
-      summary: Delete a set of records
-      description: Delete a set of records at once as a group.
+      summary: 04.- Delete a set of records
+      description: Delete a set of records at once as a group
       tags:
         - CRUD Mass Operations
       responses:
         '200':
-          description: OK
+          description: |
+            An object with two elements:
+            - success_deletes: array of deleted records
+            - failed_deletes: array of records that could not be deleted with their error message
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  success_deletes:
-                    type: array
-                    description: Array of deleted IDs.
-                    items: {}
-                  failed_deletes:
-                    type: array
-                    description: Array of IDs that could not be deleted with their error message.
-                    items: {}
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  '':
-                    type: string
+                  success:
+                    type: boolean
+                    description: "true"
+                    example: true
+                  result:
+                    type: object
+                    description: JSON object of the deleted records
+                    properties:
+                      success_deletes:
+                        type: array
+                        description: array of deleted records
+                        items: {}
+                      failed_deletes:
+                        type: array
+                        description: array of records that could not be deleted with their error message
+                        items: {}
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
-                  description: The operation name.
+                  default: MassDelete
                   example: MassDelete
+                  description: MassDelete
                 sessionName:
                   type: string
-                  description: The session ID
                   example: 1a907f77602a37b70aa5d
+                  description: active session ID
                 ids:
-                  type: array
-                  example:
-                    - 19x1
-                    - 19x6
-                  description: Comma-separated list of web service IDs to delete.
-                  items: {}
+                  type: string
+                  description: comma-separated string with all the record IDs to delete
+                  example: 12x1085,11x78
               required:
+                - ids
                 - operation
                 - sessionName
-                - ids
   /upsert:
     post:
       operationId: Upsert
-      summary: Search and update/create a set of records
-      description: 'The upsert method will permit us to execute a search on some fields in a module. [read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#upsert)'
+      summary: 05.- Search and update/create a set of records
+      description: The upsert method will permit us to execute a search on some fields in a module and mass update/create records in one call. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#upsert)'
       tags:
         - CRUD Mass Operations
       responses:
         '200':
-          description: OK
+          description: |
+            An object with two elements:
+            - success_creates: array of upserted records
+            - failed_creates: array of records that could not be upserted with their error message
           content:
             application/json:
               schema:
-                description: ''
                 type: object
-              examples:
-                example-1:
-                  value:
-                    salutationtype: string
-                    firstname: string
-                    contact_no: string
-                    lastname: string
-                    phone: string
-                    account_id: string
-                    mobile: string
-                    leadsource: string
-                    homephone: string
-                    title: string
-                    otherphone: string
-                    department: string
-                    fax: string
-                    email: string
-                    birthday: string
-                    assistant: string
-                    contact_id: string
-                    assistantphone: string
-                    secondaryemail: string
-                    emailoptout: string
-                    donotcall: string
-                    reference: string
-                    assigned_user_id: string
-                    createdtime: string
-                    notify_owner: string
-                    modifiedtime: string
-                    modifiedby: string
-                    isconvertedfromlead: string
-                    convertedfromlead: string
-                    created_user_id: string
-                    template_language: string
-                    portal: string
-                    support_start_date: string
-                    support_end_date: string
-                    mailingstreet: string
-                    otherstreet: string
-                    mailingpobox: string
-                    otherpobox: string
-                    mailingcity: string
-                    othercity: string
-                    mailingstate: string
-                    otherstate: string
-                    mailingzip: string
-                    otherzip: string
-                    mailingcountry: string
-                    othercountry: string
-                    description: string
-                    imagename: string
-                    id: string
-                    cbuuid: string
+                properties:
+                  success:
+                    type: boolean
+                    description: "true"
+                    example: true
+                  result:
+                    type: object
+                    description: JSON object of the upserted records indexed by their web service ID
+                    properties:
+                      success_creates:
+                        type: array
+                        description: array of upserted records
+                        items: {}
+                      failed_creates:
+                        type: array
+                        description: array of records that could not be upserted with their error message
+                        items: {}
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
-                  description: The operation name.
-                  example: upsert
+                  default: MassCreate
+                  example: MassCreate
+                  description: MassCreate **Note:** there is no upsert operation, [MassCreate](#post-/MassCreate) supports upsert natively
                 sessionName:
                   type: string
-                  description: The session id of the user.
                   example: 1a907f77602a37b70aa5d
-                elementType:
+                  description: active session ID
+                elements:
                   type: string
-                  description: Module name where we search and operate.
-                  example: Contacts
-                element:
-                  type: array
-                  description: Record object with fields to update/create
-                  items: {}
-                  example: '{"email":"contact@nodomain.tld","assistant":"Test A & C","firstname":"Stéphanie","lastname":"anonymous","mobile":"09988559","assigned_user_id":"19x5"}'
-                searchOn:
-                  type: string
-                  example: email
-                  description: 'Comma-separated list of fields to search on, the values will be obtained from element.'
-                updatedfields:
-                  type: string
-                  example: 'email,firstname,lastname,assistant'
-                  description: 'Comma-separated list of fields to update if the record is found, the values will be obtained from element.'
+                  description: |
+                    JSON string with all the records and field-value entries to create
+
+                    [Read about the suppported format in the documentation](https://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#crud_mass_operations)
               required:
+                - elements
                 - operation
                 - sessionName
-                - elementType
-                - element
-                - searchOn
-                - updatedfields
   /SetRelation:
     post:
       operationId: SetRelation
