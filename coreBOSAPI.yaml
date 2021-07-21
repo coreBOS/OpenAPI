@@ -2179,8 +2179,8 @@ paths:
   /getSearchResults:
     post:
       operationId: getSearchResults
-      summary: Execute a workflow with given records
-      description: Execute workflow
+      summary: WIP Launch a global search in the application
+      description: Search for a term in a set of modules
       tags:
         - Other operations
       responses:
@@ -2224,7 +2224,7 @@ paths:
   /ExecuteWorkflow:
     post:
       operationId: ExecuteWorkflow
-      summary: Execute a workflow with given records
+      summary: WIP Execute a workflow with given records
       description: Execute workflow
       tags:
         - Other operations
@@ -2269,7 +2269,7 @@ paths:
   /cbQuestionAnswer:
     get:
       operationId: QuestionAnswer
-      summary: Execute Question and get the answers
+      summary: WIP Execute Question and get the answers
       description: Get questions and answers by Id.
       tags:
         - Other operations
@@ -2303,7 +2303,7 @@ paths:
   /cbRule:
     get:
       operationId: Rules
-      summary: Execute coreBOS Rules
+      summary: WIP Execute coreBOS Rules
       description: To execute a decision map and get the result we use the coreBOS Rules service. coreBOS Rule will see that the given map is actually a decision table and will evaluate the map with the given context.
       tags:
         - Other operations
@@ -2340,8 +2340,6 @@ paths:
           name: operation
           description: The operation name.
           required: true
-
-
   /getEntityNum:
     post:
       operationId: getEntityNum
