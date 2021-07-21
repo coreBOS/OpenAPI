@@ -2010,135 +2010,133 @@ paths:
           description: maximum number of values to return
           example: 50
           required: true
-
-
   /convertlead:
     post:
       operationId: ConvertLead
       summary: Convert Leads to other entities
-      description: 'Permits the conversion of a lead into an account, contact and potential. This service is used by the application itself when converting leads.'
+      description: Permits the conversion of a lead into an account, contact and potential. This service is used by the application itself when converting leads
       tags:
         - Other operations
       responses:
         '200':
-          description: OK
+          description: array of objects with results of the search and their record ID
           content:
             application/json:
               schema:
-                type: array
-                description: Array with all the information of the new objects created.
-                items: {}
-              examples:
-                example-1:
-                  value:
-                    sessionName: fef54295fdb92649e542
-                    userId: 19x1
-                    version: '0.22'
-                    vtigerVersion: 5.5.0
-      parameters: []
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  result:
+                    type: array
+                    description: array with all the information of the new objects created
+                required:
+                  - success
+                  - result
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
-                  description: The operation name.
+                  default: convertlead
+                  example: convertlead
+                  description: convertlead
                 sessionName:
                   type: string
-                  description: ' session Id of the user.'
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
                 id:
-                  type: array
-                  description: $entityvalues is an array.
-                  items: {}
-            examples:
-              example-1:
-                value:
-                  operation: convertlead
-                  sessionName: 74b28658600dcf0e7157b
-                  id: '[]'
+                  type: string
+                  description: JSON string with all the information to convert the lead that you can [find here](https://corebos.com/documentation/doku.php?id=en:devel:corebosws:convertleadwebservice)
+              required:
+                - id
+                - operation
+                - sessionName
   /SearchGlobalVar:
     get:
-      operationId: SearchGlobalVariable
+      operationId: SearchGlobalVar
       summary: Get the value of global variables
-      description: 'This method allows customization of behavior of the application to their requirements, taking the configuration and customization of coreBOS to a whole new level.[read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#searchglobalvar)'
+      description: Retrieve the value of an application global variable. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#searchglobalvar)
       tags:
         - Other Information
       responses:
         '200':
-          description: OK
+          description: value of the global variable in the context of the given parameters
           content:
             application/json:
               schema:
-                description: ''
                 type: object
                 properties:
                   success:
                     type: boolean
+                    example: true
                   result:
                     type: string
-                    minLength: 1
+                    description: value of the global variable, if it is a business map an object with the ID and map in JSON format will be returned
                 required:
                   - success
                   - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result: '1'
       parameters:
         - schema:
             type: string
           in: query
+          name: operation
+          example: SearchGlobalVar
+          description: SearchGlobalVar
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: sessionName
+          example: 3fde6cf960edb4e9e91e3
+          description: The session ID
+          required: true
+        - schema:
+            type: string
+          in: query
           name: gvname
-          description: Name of the global variable.
+          description: Name of the global variable
+          example: Application_ListView_PageSize
           required: true
         - schema:
             type: string
           in: query
           name: defaultvalue
-          description: Default value to be returned if not found.
+          description: Default value to be returned if not found
+          example: 33
           required: true
         - schema:
             type: string
           in: query
           name: gvmodule
-          description: Module to be searched on.
+          description: Module context to be searched in
+          example: Assets
           required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          required: true
-          description: The operation name.
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          required: true
-          description: The session Id .
   /getLoginPage:
     get:
       operationId: getLoginPage
       summary: Get the HTML of a login page
-      description: Getting the login page.
+      description: retrieve the HTML of a coreBOS login screen
       tags:
         - Other Information
       responses:
         '200':
-          description: OK
+          description: retrieve the HTML of a coreBOS login screen
           content:
             application/json:
               schema:
-                description: ''
                 type: object
                 properties:
                   success:
                     type: boolean
+                    example: true
                   result:
                     type: string
-                    minLength: 1
+                    description: HTML of the login screen
                 required:
                   - success
                   - result
@@ -2146,35 +2144,38 @@ paths:
         - schema:
             type: string
           in: query
+          name: operation
+          example: getLoginPage
+          description: getLoginPage
+          required: true
+        - schema:
+            type: string
+          in: query
           name: sessionName
-          description: The session Id of the current user logged in.
+          example: 3fde6cf960edb4e9e91e3
+          description: The session ID
           required: true
         - schema:
             type: string
           in: query
           name: template
-          description: View template to render the page.
+          description: login template to retrieve
+          example: ldsnoimage
           required: true
         - schema:
             type: string
           in: query
           name: language
-          description: The page language.
+          description: the language we want the page in
+          example: es_es
           required: true
         - schema:
-            type: integer
+            type: boolean
           in: query
           name: csrf
+          description: if the HTML should in CSRF control code
+          example: false
           required: true
-          description: csrf.
-        - schema:
-            type: string
-          in: query
-          name: operation
-          description: The operation name.
-          required: true
-
-
   /getSearchResults:
     post:
       operationId: getSearchResults
