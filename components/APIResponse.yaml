@@ -203,3 +203,30 @@ FilterInfoHTMLResponse:
           type: integer
           description: number of rows per page in list
           example: 40
+PermissionQueryResponse:
+  description: object with the SQL restrictions
+  type: object
+  required:
+    - success
+    - result
+  properties:
+    success:
+      type: boolean
+      description: true
+      example: true
+    result:
+      type: object
+      description: SQL restrictions information
+      properties:
+        permissonTable:
+          type: string
+          description: name of the temporary table used in the SQL
+          example: vt_tmp_u11
+        permissionQuery:
+          type: string
+          description: SQL to fill the temporary table
+          example: (SELECT 11 as id) UNION (SELECT vtiger_user2role.userid AS userid FROM vtiger_user2role INNER JOIN vtiger_role ON vtiger_role.roleid=vtiger_user2role.roleid WHERE vtiger_role.parentrole like 'H1::H2::H3::H6::%') UNION (SELECT groupid FROM vtiger_groups where groupid in (3,4))
+        permissionJoin:
+          type: string
+          description: join to add to your SQL to apply the restrictions
+          example: INNER JOIN vt_tmp_u11 vt_tmp_u11 ON vt_tmp_u11.id = vtiger_crmentity.smownerid

@@ -1600,179 +1600,15 @@ paths:
                 - operation
                 - sessionName
   /getReferenceValue:
-    get:
+    post:
       operationId: getReferenceValue
       summary: Convert record IDs into their representative entity names
-      description: Convert web service IDs into their entity names.
+      description: Convert web service IDs into their entity names. This method has lost a lot of importance now that [Retrieve](#get-/retrieve) returns this information directly
       tags:
         - Other Information
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: string
-                    minLength: 1
-                required:
-                  - success
-                  - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result: 'a:0:{}'
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: id
-          description: PHP serialzed array of web service IDs to convert.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          description: The operation name.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          description: The session Id of the user.
-          required: true
-  /getModulePermissionQuery:
-    get:
-      operationId: getModulePermissionQuery
-      summary: coreBOS restriction SQL commands
-      description: 'Returns SQL query restrictions that must be applied to enforce application permissions.[read more](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#getmodulepermissionquery)'
-      tags:
-        - Other Information
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: object
-                    properties:
-                      permissonTable:
-                        type: string
-                      permissionQuery:
-                        type: string
-                      permissionJoin:
-                        type: string
-                        minLength: 1
-                    required:
-                      - permissonTable
-                      - permissionQuery
-                      - permissionJoin
-                required:
-                  - success
-                  - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result:
-                      permissonTable: ''
-                      permissionQuery: ''
-                      permissionJoin: ' '
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: module
-          description: Name of the module for which we want to retrieve the restrictions.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          description: The operation name.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          description: The sessionId of the user.
-          required: true
-  /getPicklistValues:
-    post:
-      operationId: getPicklistValues
-      summary: Retrieve module picklist metadata
-      description: Get picklist fields for the given module and all their possible values.
-      tags:
-        - Other Information
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  result:
-                    type: string
-                    minLength: 1
-                required:
-                  - success
-                  - result
-              examples:
-                example-1:
-                  value:
-                    success: true
-                    result: 'a:4:{s:6:"glacct";a:9:{s:18:"300-Sales-Software";s:18:"300-Sales-Software";s:18:"301-Sales-Hardware";s:18:"301-Sales-Hardware";s:17:"302-Rental-Income";s:17:"302-Rental-Income";s:19:"303-Interest-Income";s:19:"303-Interest-Income";s:26:"304-Sales-Software-Support";s:26:"304-Sales-Software-Support";s:15:"305-Sales Other";s:15:"305-Sales Other";s:18:"306-Internet Sales";s:18:"306-Internet Sales";s:26:"307-Service-Hardware Labor";s:26:"307-Service-Hardware Labor";s:15:"308-Sales-Books";s:15:"308-Sales-Books";}s:12:"manufacturer";a:4:{s:8:"--None--";s:8:"--None--";s:14:"AltvetPet Inc.";s:14:"AltvetPet Inc.";s:11:"LexPon Inc.";s:11:"LexPon Inc.";s:12:"MetBeat Corp";s:12:"MetBeat Corp";}s:15:"productcategory";a:4:{s:8:"--None--";s:8:"--None--";s:8:"Hardware";s:8:"Hardware";s:8:"Software";s:8:"Software";s:16:"CRM Applications";s:16:"CRM Applications";}s:9:"usageunit";a:16:{s:3:"Box";s:3:"Box";s:6:"Carton";s:6:"Carton";s:5:"Dozen";s:5:"Dozen";s:4:"Each";s:4:"Each";s:5:"Hours";s:5:"Hours";s:11:"Impressions";s:11:"Impressions";s:2:"Lb";s:2:"Lb";s:1:"M";s:1:"M";s:4:"Pack";s:4:"Pack";s:5:"Pages";s:5:"Pages";s:6:"Pieces";s:6:"Pieces";s:8:"Quantity";s:8:"Quantity";s:5:"Reams";s:5:"Reams";s:5:"Sheet";s:5:"Sheet";s:13:"Spiral Binder";s:13:"Spiral Binder";s:5:"Sq Ft";s:5:"Sq Ft";}}'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                operation:
-                  type: string
-                  description: The operation name.
-                sessionName:
-                  type: string
-                  description: The session name.
-                module:
-                  type: string
-                  description: Name of the module for which we want to retrieve the picklist values.
-              required:
-                - operation
-                - sessionName
-                - module
-            examples:
-              example-1:
-                value:
-                  operation: getPicklistValues
-                  sessionName: 632bc8df6007637526ef8
-                  module: Products
-  /getEntityNum:
-    post:
-      operationId: getEntityNum
-      summary: Returns auto-numeric field prefix information for each module
-      description: Get the auto numeric field prefixes of all modules with a uitype 4 field.
-      tags:
-        - Other Information
-      responses:
-        '200':
-          description: module auto-numeric prefixes or error
+          description: PHP serialzed relation of entity names of the given records
           content:
             application/json:
               schema:
@@ -1783,12 +1619,26 @@ paths:
                     example: true
                   result:
                     type: object
-                    description: list of module and their prefixes
-                    example: {
-                      "Leads":["LEA"],
-                      "Accounts":["ACC"],
-                      "Campaigns":["CAM"]
-                    }
+                    properties:
+                      recordid:
+                        type: object
+                        description: reference record information in PHP serialzed format
+                        properties:
+                          module:
+                            type: string
+                            description: name of the module of the record
+                            example: Accounts
+                          reference:
+                            type: string
+                            description: entity name of the record
+                            example: Chemex Labs
+                          cbuuid:
+                            type: string
+                            description: coreBOS UUID of the record
+                            example: a609725772dc91ad733b19e4100cf68bb30195d1
+                required:
+                  - success
+                  - result
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -1797,50 +1647,132 @@ paths:
               properties:
                 operation:
                   type: string
-                  default: getEntityNum
-                  example: getEntityNum
-                  description: getEntityNum
+                  default: getReferenceValue
+                  example: getReferenceValue
+                  description: getReferenceValue
                 sessionName:
                   type: string
-                  example: 1a907f77602a37b70aa5d
+                  example: 3fde6cf960edb4e9e91e3
                   description: active session ID
+                id:
+                  type: string
+                  description: PHP serialzed array of web service IDs to convert
+                  example: 'a:2:{i:0;s:7:"12x1084";i:1;s:5:"11x75";}'
               required:
+                - id
+                - operation
+                - sessionName
+  /getModulePermissionQuery:
+    get:
+      operationId: getModulePermissionQuery
+      summary: coreBOS restriction SQL commands
+      description: Returns SQL query restrictions that must be applied to enforce application permissions. [Additional information](http://corebos.com/documentation/doku.php?id=en:devel:corebosws:methodreference#getmodulepermissionquery)'
+      tags:
+        - Other Information
+      responses:
+        '200':
+          description: object with the SQL restrictions or error
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: 'components/APIResponse.yaml#/PermissionQueryResponse'
+                  - $ref: 'components/APISessionError.yaml#/APISessionError'
+                  - $ref: 'components/APIAccessDenied.yaml#/APIAccessDenied'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: operation
+          example: getModulePermissionQuery
+          description: getModulePermissionQuery
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: sessionName
+          example: 3fde6cf960edb4e9e91e3
+          description: The session ID
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: module
+          example: Accounts
+          description: module name for which we need the SQL restrictions
+          required: true
+  /getPicklistValues:
+    post:
+      operationId: getPicklistValues
+      summary: Retrieve module picklist metadata
+      description: Get picklist fields for the given module and all their possible values
+      tags:
+        - Other Information
+      responses:
+        '200':
+          description: PHP serialzed array of picklist fields and their information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  result:
+                    type: string
+                    description: reference record information in PHP serialzed format
+                    example: 'a:4:{s:6:"glacct";a:9:{s:18:"300-Sales-Software";s:18:"300-Sales-Software";s:18:"301-Sales-Hardware";s:18:"301-Sales-Hardware";s:17:"302-Rental-Income";s:17:"302-Rental-Income";s:19:"303-Interest-Income";s:19:"303-Interest-Income";s:26:"304-Sales-Software-Support";s:26:"304-Sales-Software-Support";s:15:"305-Sales Other";s:15:"305-Sales Other";s:18:"306-Internet Sales";s:18:"306-Internet Sales";s:26:"307-Service-Hardware Labor";s:26:"307-Service-Hardware Labor";s:15:"308-Sales-Books";s:15:"308-Sales-Books";}s:12:"manufacturer";a:4:{s:8:"--None--";s:8:"--None--";s:14:"AltvetPet Inc.";s:14:"AltvetPet Inc.";s:11:"LexPon Inc.";s:11:"LexPon Inc.";s:12:"MetBeat Corp";s:12:"MetBeat Corp";}s:15:"productcategory";a:4:{s:8:"--None--";s:8:"--None--";s:8:"Hardware";s:8:"Hardware";s:8:"Software";s:8:"Software";s:16:"CRM Applications";s:16:"CRM Applications";}s:9:"usageunit";a:16:{s:3:"Box";s:3:"Box";s:6:"Carton";s:6:"Carton";s:5:"Dozen";s:5:"Dozen";s:4:"Each";s:4:"Each";s:5:"Hours";s:5:"Hours";s:11:"Impressions";s:11:"Impressions";s:2:"Lb";s:2:"Lb";s:1:"M";s:1:"M";s:4:"Pack";s:4:"Pack";s:5:"Pages";s:5:"Pages";s:6:"Pieces";s:6:"Pieces";s:8:"Quantity";s:8:"Quantity";s:5:"Reams";s:5:"Reams";s:5:"Sheet";s:5:"Sheet";s:13:"Spiral Binder";s:13:"Spiral Binder";s:5:"Sq Ft";s:5:"Sq Ft";}}'
+                required:
+                  - success
+                  - result
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: getPicklistValues
+                  example: getPicklistValues
+                  description: getPicklistValues
+                sessionName:
+                  type: string
+                  example: 3fde6cf960edb4e9e91e3
+                  description: active session ID
+                module:
+                  type: string
+                  description: name of the module for which we want to retrieve the picklist values
+                  example: Products
+              required:
+                - module
                 - operation
                 - sessionName
   /gettranslation:
     post:
       operationId: gettranslation
       summary: Translate strings using coreBOS
-      description: This method permits us to use the translations in the application in our frontend application.
+      description: This method permits us to use the translations in the application in our frontend application
       tags:
         - Other Information
       responses:
         '200':
-          description: OK
+          description: object with key-translation
           content:
             application/json:
               schema:
-                description: ''
                 type: object
                 properties:
                   success:
                     type: boolean
+                    example: true
                   result:
                     type: object
+                    description: key-translation
                     properties:
-                      Accounts:
+                      key:
                         type: string
-                        minLength: 1
-                      LBL_LIST_ACCOUNT_NAME:
-                        type: string
-                        minLength: 1
-                      Portal User:
-                        type: string
-                        minLength: 1
-                    required:
-                      - Accounts
-                      - LBL_LIST_ACCOUNT_NAME
-                      - Portal User
                 required:
                   - success
                   - result
@@ -1852,70 +1784,6 @@ paths:
                       Accounts: Cuentas
                       LBL_LIST_ACCOUNT_NAME: Cuentas
                       Portal User: Usuario de Portal
-                example-2:
-                  value:
-                    Accounts: Cuentas
-                    LBL_LIST_ACCOUNT_NAME: Cuentas
-                    Portal User: Usuario de Portal
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                operation:
-                  type: string
-                  description: The operation name.
-                sessionName:
-                  type: string
-                  description: The session Id of the user.
-                totranslate:
-                  type: string
-                  description: 'Object with the keys to translate, the value will be ignored if a translation exists or returned if no translation exists.'
-                language:
-                  type: string
-                  description: A valid application language identifier (e.g. es_es).
-                module:
-                  type: string
-                  description: Module to start the translations from.
-              required:
-                - operation
-                - sessionName
-                - totranslate
-                - language
-                - module
-            examples:
-              example-1:
-                value:
-                  operation: gettranslation
-                  sessionName: 32d0b5f76008a6707fc20
-                  totranslate: '["Accounts","LBL_LIST_ACCOUNT_NAME","Client Portal User"]'
-                  language: es_es
-                  module: Contacts
-        description: ''
-  /jsLog:
-    post:
-      operationId: jsLog
-      summary: Logging from javascript to backend
-      description: The jsLog endpoint permits us to send any message from javascript to our coreBOS backend
-      tags:
-        - Other operations
-      responses:
-        '200':
-          description: this endpoint returns an empty result or error
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    description: "true"
-                    example: true
-                  result:
-                    type: boolean
-                    example: null
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -1924,69 +1792,67 @@ paths:
               properties:
                 operation:
                   type: string
-                  default: jsLog
-                  example: jsLog
-                  description: jsLog
+                  default: gettranslation
+                  example: gettranslation
+                  description: gettranslation
                 sessionName:
                   type: string
-                  example: 1a907f77602a37b70aa5d
+                  example: 3fde6cf960edb4e9e91e3
                   description: active session ID
-                level:
+                totranslate:
                   type: string
-                  description: coreBOS logging level
-                  example: FATAL
-                message:
+                  description: JSON encoded object with the keys to translate, if it is an array an array will be returned
+                  example: '{"Accounts":"Accounts","LBL_LIST_ACCOUNT_NAME":"LBL_LIST_ACCOUNT_NAME","Client Portal User":"Client Portal User"}'
+                language:
                   type: string
-                  description: The string to write in the log if the given level is matched
-                  example: some variable value
+                  description: valid application language identifier
+                  example: es_es
+                module:
+                  type: string
+                  description: module to start the translations from
+                  example: Contacts
               required:
                 - operation
                 - sessionName
-                - level
-                - message
-  /sync:
-    $ref: 'paths/sync.yaml#/sync'
+                - totranslate
+                - language
+                - module
   /getFieldAutocomplete:
     get:
       operationId: getFieldAutocomplete
-      summary: Autocompletion service
-      description: Executes a search in the list of fields of a module for the given term with the selected operator.
+      summary: Autocomplete service
+      description: |
+        Executes a search in the list of fields of a module for the given term with the selected operator and returns the values of the indicated fields for the records found
+
+        This method permits us to create the typical "fill in as you type" functionality. [Read how to do it here](https://corebos.com/documentation/doku.php?id=en:devel:corebosws:manual:autocomplete)
       tags:
         - Other operations
       responses:
         '200':
-          description: OK
+          description: array of objects with results of the search and their record ID
           content:
             application/json:
               schema:
-                description: ''
                 type: object
                 properties:
                   success:
                     type: boolean
+                    example: true
                   result:
                     type: array
-                    uniqueItems: true
-                    minItems: 1
+                    description: array of search results
                     items:
-                      required:
-                        - crmid
                       properties:
                         crmid:
                           type: string
-                          minLength: 1
+                          description: internal ID of the record found
                         crmfields:
                           type: object
+                          description: requested field values
                           properties:
-                            productname:
+                            fieldname:
                               type: string
-                              minLength: 1
-                            vendor_part_no:
-                              type: string
-                              minLength: 1
-                          required:
-                            - productname
-                            - vendor_part_no
+                              example: fieldvalue
                 required:
                   - success
                   - result
@@ -2003,88 +1869,93 @@ paths:
         - schema:
             type: string
           in: query
+          name: operation
+          example: getFieldAutocomplete
+          description: getFieldAutocomplete
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: sessionName
+          example: 3fde6cf960edb4e9e91e3
+          description: The session ID
+          required: true
+        - schema:
+            type: string
+          in: query
           name: term
           description: search term
+          example: ch
           required: true
         - schema:
             type: string
           in: query
           name: filter
-          description: 'Operator to use eq, neq, startswith, endswith, contains.'
+          description: Operator to use eq, neq, startswith, endswith, contains
+          example: contains
           required: true
         - schema:
             type: string
           in: query
           name: searchinmodule
-          description: 'Valid module to search in '
+          description: module name to search in
           required: true
+          example: Accounts
         - schema:
             type: string
           in: query
           name: fields
-          description: Comma-separated list of fields to search in .
+          description: Comma-separated list of fields to search in
           required: true
+          example: accountname,industry
         - schema:
             type: string
           in: query
           name: returnfields
-          description: 'Comma-separated list of fields to return as result, if empty fields will be returned'
+          description: Comma-separated list of fields to return as result, if empty the fields in the fields parameter will be returned
           required: true
         - schema:
-            type: number
+            type: integer
           in: query
           name: limit
-          description: Maximum number of values to return
+          description: maximum number of values to return
+          example: 50
           required: true
-        - schema:
-            type: string
-          in: query
-          name: operation
-          required: true
-          description: The operation name.
-        - schema:
-            type: string
-          in: query
-          name: sessionName
-          required: true
-          description: The session ID
   /getReferenceAutocomplete:
     get:
       operationId: getReferenceAutocomplete
       summary: Autocomplete service using reference fields
-      description: Executes a search in the entity fields of the given modules for the given term with the selected operator.
+      description: |
+        Executes a search in the entity fields of the given modules for the given term with the selected operator and returns the reference value
+
+        This method permits us to create the typical "fill in as you type" functionality. [Read how to do it here](https://corebos.com/documentation/doku.php?id=en:devel:corebosws:manual:autocomplete)
       tags:
         - Other operations
       responses:
         '200':
-          description: OK
+          description: array of objects with results of the search and their record ID
           content:
             application/json:
               schema:
-                description: ''
                 type: object
                 properties:
                   success:
                     type: boolean
+                    example: true
                   result:
                     type: array
-                    uniqueItems: true
-                    minItems: 1
+                    description: array of search results
                     items:
-                      required:
-                        - crmid
-                        - crmname
-                        - crmmodule
                       properties:
                         crmid:
                           type: string
-                          minLength: 1
-                        crmname:
-                          type: string
-                          minLength: 1
+                          description: internal ID of the record found
                         crmmodule:
                           type: string
-                          minLength: 1
+                          description: internal module name of the record found
+                        crmname:
+                          type: string
+                          description: reference value of the record
                 required:
                   - success
                   - result
@@ -2100,39 +1971,93 @@ paths:
         - schema:
             type: string
           in: query
-          name: term
-          description: 'Search term '
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: filter
-          description: 'operator to use eq, neq, startswith, endswith, contains .'
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: searchinmodules
-          description: Comma-separated list of modules to search in.
-          required: true
-        - schema:
-            type: number
-          in: query
-          name: limit
-          description: Maximum number of values to return.
-          required: true
-        - schema:
-            type: string
-          in: query
           name: operation
-          description: The operation name.
+          example: getReferenceAutocomplete
+          description: getReferenceAutocomplete
           required: true
         - schema:
             type: string
           in: query
           name: sessionName
-          description: The session Id of the user.
+          example: 3fde6cf960edb4e9e91e3
+          description: The session ID
           required: true
+        - schema:
+            type: string
+          in: query
+          name: term
+          description: search term
+          example: ch
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: filter
+          description: Operator to use eq, neq, startswith, endswith, contains
+          example: contains
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: searchinmodules
+          description: Comma-separated list of modules to search in
+          required: true
+          example: Accounts,Contacts
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: maximum number of values to return
+          example: 50
+          required: true
+
+
+  /convertlead:
+    post:
+      operationId: ConvertLead
+      summary: Convert Leads to other entities
+      description: 'Permits the conversion of a lead into an account, contact and potential. This service is used by the application itself when converting leads.'
+      tags:
+        - Other operations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Array with all the information of the new objects created.
+                items: {}
+              examples:
+                example-1:
+                  value:
+                    sessionName: fef54295fdb92649e542
+                    userId: 19x1
+                    version: '0.22'
+                    vtigerVersion: 5.5.0
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  description: The operation name.
+                sessionName:
+                  type: string
+                  description: ' session Id of the user.'
+                id:
+                  type: array
+                  description: $entityvalues is an array.
+                  items: {}
+            examples:
+              example-1:
+                value:
+                  operation: convertlead
+                  sessionName: 74b28658600dcf0e7157b
+                  id: '[]'
   /SearchGlobalVar:
     get:
       operationId: SearchGlobalVariable
@@ -2248,6 +2173,53 @@ paths:
           name: operation
           description: The operation name.
           required: true
+
+
+  /getSearchResults:
+    post:
+      operationId: getSearchResults
+      summary: Execute a workflow with given records
+      description: Execute workflow
+      tags:
+        - Other operations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  description: The operation name.
+                sessionName:
+                  type: string
+                  description: The session ID
+                workflow:
+                  type: string
+                  description: Workflow.
+                entities:
+                  type: string
+                  description: Entities to execute workflow.
+              required:
+                - operation
+                - sessionName
+                - workflow
+                - entities
+            examples:
+              example-1:
+                value:
+                  operation: getSearchResults
+                  sessionName: 5d9d39e2601060bdacb72
+                  workflow: '27'
+                  entities: '["17x2642"]'
   /ExecuteWorkflow:
     post:
       operationId: ExecuteWorkflow
@@ -2293,7 +2265,6 @@ paths:
                   sessionName: 5d9d39e2601060bdacb72
                   workflow: '27'
                   entities: '["17x2642"]'
-        description: ''
   /cbQuestionAnswer:
     get:
       operationId: QuestionAnswer
@@ -2368,55 +2339,105 @@ paths:
           name: operation
           description: The operation name.
           required: true
-  /convertlead:
+
+
+  /getEntityNum:
     post:
-      operationId: ConvertLead
-      summary: Convert Leads to other entities
-      description: 'Permits the conversion of a lead into an account, contact and potential. This service is used by the application itself when converting leads.'
+      operationId: getEntityNum
+      summary: Returns auto-numeric field prefix information for each module
+      description: Get the auto numeric field prefixes of all modules with a uitype 4 field.
       tags:
-        - Other operations
+        - Other Information
       responses:
         '200':
-          description: OK
+          description: module auto-numeric prefixes or error
           content:
             application/json:
               schema:
-                type: array
-                description: Array with all the information of the new objects created.
-                items: {}
-              examples:
-                example-1:
-                  value:
-                    sessionName: fef54295fdb92649e542
-                    userId: 19x1
-                    version: '0.22'
-                    vtigerVersion: 5.5.0
-      parameters: []
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  result:
+                    type: object
+                    description: list of module and their prefixes
+                    example: {
+                      "Leads":["LEA"],
+                      "Accounts":["ACC"],
+                      "Campaigns":["CAM"]
+                    }
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 operation:
                   type: string
-                  description: The operation name.
+                  default: getEntityNum
+                  example: getEntityNum
+                  description: getEntityNum
                 sessionName:
                   type: string
-                  description: ' session Id of the user.'
-                id:
-                  type: array
-                  description: $entityvalues is an array.
-                  items: {}
-            examples:
-              example-1:
-                value:
-                  operation: convertlead
-                  sessionName: 74b28658600dcf0e7157b
-                  id: '[]'
-        description: ''
-
-
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+              required:
+                - operation
+                - sessionName
+  /jsLog:
+    post:
+      operationId: jsLog
+      summary: Logging from javascript to backend
+      description: The jsLog endpoint permits us to send any message from javascript to our coreBOS backend
+      tags:
+        - Other operations
+      responses:
+        '200':
+          description: this endpoint returns an empty result or error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: "true"
+                    example: true
+                  result:
+                    type: boolean
+                    example: null
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                operation:
+                  type: string
+                  default: jsLog
+                  example: jsLog
+                  description: jsLog
+                sessionName:
+                  type: string
+                  example: 1a907f77602a37b70aa5d
+                  description: active session ID
+                level:
+                  type: string
+                  description: coreBOS logging level
+                  example: FATAL
+                message:
+                  type: string
+                  description: The string to write in the log if the given level is matched
+                  example: some variable value
+              required:
+                - operation
+                - sessionName
+                - level
+                - message
+  /sync:
+    $ref: 'paths/sync.yaml#/sync'
   /gendoc_convert:
     post:
       operationId: GenDocConversion
